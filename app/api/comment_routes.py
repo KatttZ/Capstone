@@ -5,7 +5,7 @@ from datetime import datetime
 
 
 
-comment_routes = Blueprint('comments', __name__, url_prefix='/api/comments')
+comment_routes = Blueprint('comments', __name__)
 
 @comment_routes.route('/<int:comment_id>', methods=['GET'])
 @login_required

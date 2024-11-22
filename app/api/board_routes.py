@@ -3,7 +3,7 @@ from flask_login import login_required, current_user
 from app.models import db, Board, List
 
 
-board_routes = Blueprint('boards', __name__, url_prefix='/api/boards')
+board_routes = Blueprint('boards', __name__)
 
 
 @board_routes.route('/', methods=['GET'])

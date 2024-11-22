@@ -4,7 +4,7 @@ from app.models import db, List, Card
 
 
 
-list_routes = Blueprint('lists', __name__, url_prefix='/api/lists')
+list_routes = Blueprint('lists', __name__)
 
 @list_routes.route('/<int:list_id>', methods=['GET'])
 @login_required

@@ -31,8 +31,18 @@ function LoginFormPage() {
     }
   };
 
+  const handleDemoLogin = () => {
+    setEmail("demo@aa.io")
+    setPassword("password")
+  }
+
+  const handleSignUpClick = () => {
+    navigate('/signup');
+  };
+
   return (
-    <>
+    <div className='login_page_container'>
+      <div className='login_page_content'>
       <h1>Log In</h1>
       {errors.length > 0 &&
         errors.map((message) => <p key={message}>{message}</p>)}
@@ -43,23 +53,28 @@ function LoginFormPage() {
             type="text"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            className={errors.email ? "error" : ""}
             required
           />
         </label>
-        {errors.email && <p>{errors.email}</p>}
+        {errors.email && <p className="error">{errors.email}</p>}
         <label>
           Password
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            className={errors.password ? "error" : ""}
             required
           />
         </label>
-        {errors.password && <p>{errors.password}</p>}
+        {errors.password && <p className="error">{errors.password}</p>}
         <button type="submit">Log In</button>
+        <button onClick={handleDemoLogin}>Demo User Login</button>
+        <p>{`New to CardFlow?`} <a onClick={handleSignUpClick}>Sign up</a></p>
       </form>
-    </>
+      </div>
+    </div>
   );
 }
 

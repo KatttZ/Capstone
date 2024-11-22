@@ -4,7 +4,7 @@ from app.models import db, Card, Comment
 from datetime import datetime
 
 
-card_routes = Blueprint('cards', __name__, url_prefix='/api/cards')
+card_routes = Blueprint('cards', __name__)
 
 
 @card_routes.route('/<int:card_id>', methods=['GET'])

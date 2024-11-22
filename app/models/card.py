@@ -12,7 +12,7 @@ class Card(db.Model):
     title = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=True)
     list_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('lists.id')), nullable=False)
-    position = db.Column(db.Integer, nullable=False, default=0)
+    position = db.Column(db.Integer, nullable=False)
 
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
@@ -22,16 +22,22 @@ class Card(db.Model):
     comments = db.relationship('Comment', back_populates='card', cascade='all, delete-orphan')
     labels = db.relationship('Label', secondary='card_labels', back_populates='cards')
 
-    def to_dict(self):
-        return {
+    def to_dict(self, include_comments=False, include_labels=False):
+        card_dict = {
             'id': self.id,
             'title': self.title,
             'description': self.description,
             'list_id': self.list_id,
             'position': self.position,
-            'comments': [comment.to_dict() for comment in self.comments],
-            'labels': [label.to_dict() for label in self.labels] if self.labels else [],# handle case where card has no labels
             'created_at': self.created_at,
-            'updated_at': self.updated_at, 
+            'updated_at': self.updated_at,
         }
+
+        if include_comments:
+            card_dict['comments'] = [comment.to_dict() for comment in self.comments]
+       
+        if include_labels:
+            card_dict['labels'] = [label.to_dict() for label in self.labels]
+        
+        return card_dict
     

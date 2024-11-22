@@ -21,12 +21,16 @@ class Board(db.Model):
     owner = db.relationship('User', back_populates='boards')
     lists = db.relationship('List', back_populates='board', cascade='all, delete-orphan')
 
-    def to_dict(self):
-        return {
+    def to_dict(self, include_lists=False):
+        board_dict = {
             'id': self.id,
             'title': self.title,
             'user_id': self.user_id,
-            'lists': [list.to_dict() for list in self.lists],
             'created_at': self.created_at,
             'updated_at': self.updated_at,
         }
+
+        if include_lists:
+            board_dict['lists'] = [list.to_dict() for list in self.lists]
+            
+        return board_dict

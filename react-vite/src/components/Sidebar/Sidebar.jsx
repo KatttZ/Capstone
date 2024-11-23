@@ -1,14 +1,16 @@
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { thunkGetAllBoards } from "../../redux/board";
 import "./Sidebar.css";
 
 export default function Sidebar({ onBoardsClick, onBoardSelect }) {
-  const boards = [
-    { id: 1, name: "Board 1" },
-    { id: 2, name: "Board 2" },
-    { id: 3, name: "Board 3" },
-    { id: 4, name: "Board 4" },
-  ];
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.session.user);
+  const boards = useSelector((state) => state.board.allBoards);
+
+  useEffect(() => {
+    dispatch(thunkGetAllBoards());
+  },[dispatch])
 
   return (
     <div className="sidebar">
@@ -24,7 +26,7 @@ export default function Sidebar({ onBoardsClick, onBoardSelect }) {
             className="sidebar-board"
             onClick={() => onBoardSelect(board.id)}
           >
-            {board.name}
+            {board.title}
           </li>
         ))}
       </ul>

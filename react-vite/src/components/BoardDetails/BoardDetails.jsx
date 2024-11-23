@@ -1,21 +1,19 @@
-// import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { thunkGetAllBoards } from "../../redux/board";
 import "./BoardDetails.css";
 
 export default function BoardDetails({ boardId }) {
-    const boards = [
-        { id: 1, name: "Board 1" },
-        { id: 2, name: "Board 2" },
-        { id: 3, name: "Board 3" },
-        { id: 4, name: "Board 4" },
-      ];
+  const dispatch = useDispatch();
+  const board = useSelector((state) => state.board.allBoards.find((board) => board.id === boardId));
 
-  const board = boards.find((board) => board.id === boardId);
-
-  if (!board) return <p>Board not found!</p>;
+  useEffect(() => {
+    dispatch(thunkGetAllBoards());
+  },[dispatch])
 
   return (
     <div className="board-details">
-      <h2>{board.name}</h2>
+      <h2>{board.title}</h2>
       {/* <ul>
         {board.lists.map((list) => (
           <li key={list.id} className="list-item">

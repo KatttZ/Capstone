@@ -121,6 +121,7 @@ export const thunkDeleteBoard = (boardId) => async (dispatch) => {
   if (res.ok) {
     const data = await res.json();
     dispatch(deleteBoard(data));
+    dispatch(thunkGetAllBoards());
     return data;
   } else {
     const errors = await res.json();

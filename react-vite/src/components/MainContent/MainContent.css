@@ -30,7 +30,7 @@
   background-color: #d4d8dc;
 }
 
-.board-grid button {
+.board-lists-container button {
   border:none;
   display: flex;
   justify-content: center;
@@ -44,7 +44,7 @@
   font-style: italic;
 }
 
-.board-grid button:hover {
+.board-lists-container button:hover {
   background-color: #d4d8dc;
 }
 

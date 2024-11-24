@@ -21,15 +21,44 @@
 }
 
 .sidebar-board {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin: 10px 0;
   padding: 10px;
   background-color: #ffffff;
   border-radius: 5px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   cursor: pointer;
-  text-align: center;
 }
 
 .sidebar-board:hover {
   background-color: #e2e6ea;
+}
+
+
+.board-actions {
+  visibility: hidden;
+  margin-left: 8px;
+}
+
+.sidebar-board:hover .board-actions {
+  visibility: visible;
+}
+
+.board-actions button {
+  background: none;
+  border: none;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.board-actions button:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.no-boards {
+  padding: 12px;
+  font-style: italic;
+  color: #555;
 }

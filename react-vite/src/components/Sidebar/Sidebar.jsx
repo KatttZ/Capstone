@@ -1,10 +1,9 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { thunkGetAllBoards} from "../../redux/board";
+import { thunkGetAllBoards } from "../../redux/board";
 import OpenModalButton from "../OpenModalButton";
 import ConfirmDeletionModal from "../ConfirmDeletionModal";
 import "./Sidebar.css";
-
 
 export default function Sidebar({ onBoardsClick, onBoardSelect }) {
   const dispatch = useDispatch();
@@ -23,8 +22,6 @@ export default function Sidebar({ onBoardsClick, onBoardSelect }) {
     onBoardsClick();
   };
 
-
-
   return (
     <div className="sidebar">
       <h2>{user.username}&apos;s Workspace</h2>
@@ -35,20 +32,23 @@ export default function Sidebar({ onBoardsClick, onBoardSelect }) {
       <ul>
         {boards.length > 0 ? (
           boards.map((board) => (
-            <li
-              key={board.id}
-              className="sidebar-board"
-              onClick={() => handleBoardSelect(board.id)}
-            >
-              {board.title}
-              <OpenModalButton 
-                modalComponent={<ConfirmDeletionModal boardId={board.id} />}
-                buttonText="Delete"
-              />
+            <li key={board.id} className="sidebar-board">
+              <span onClick={() => handleBoardSelect(board.id)}>
+                {board.title}
+              </span>
+              <div className="board-actions">
+                <OpenModalButton
+                  modalComponent={<ConfirmDeletionModal boardId={board.id} />}
+                  buttonText="Delete"
+                  onButtonClick={(e) => e.stopPropagation()}
+                />
+              </div>
             </li>
           ))
         ) : (
-          <p className="no-boards">No boards available. Create a new board to get started!</p>
+          <p className="no-boards">
+            No boards available. Create a new board to get started!
+          </p>
         )}
       </ul>
     </div>

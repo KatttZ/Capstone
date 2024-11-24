@@ -1,0 +1,15 @@
+.board-details {
+  flex: 1;
+}
+
+.board-header {
+  background-color: rgb(91, 148, 201);
+    padding: 10px;
+}
+
+.lists-container {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding: 10px;
+}

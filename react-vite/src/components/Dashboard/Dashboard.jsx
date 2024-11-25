@@ -9,7 +9,6 @@ export default function Dashboard() {
   const [selectedBoardId, setSelectedBoardId] = useState(null);
 
   return (
-    <div className="dashboard">
       <div className="dashboard-container">
         <Sidebar
           onBoardsClick={() => {
@@ -32,6 +31,5 @@ export default function Dashboard() {
           <BoardDetails boardId={selectedBoardId} />
         )}
       </div>
-    </div>
   );
 }

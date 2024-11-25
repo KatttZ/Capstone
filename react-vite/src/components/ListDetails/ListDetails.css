@@ -1,16 +1,12 @@
+.list {
+  min-width: 200px;
+  background: #ebecf0;
+  border-radius: 3px;
+  padding: 10px;
+}
 
-
-  
-  .list {
-    min-width: 200px;
-    background: #ebecf0;
-    border-radius: 3px;
-    padding: 10px;
-  }
-  
-  .list h3 {
-    margin: 0 0 10px 0;
-    padding: 10px;
-    font-size: 14px;
-  }
-  
+.list h3 {
+  margin: 0 0 10px 0;
+  padding: 10px;
+  font-size: 14px;
+}

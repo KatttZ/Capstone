@@ -1,0 +1,27 @@
+.Confirm-delete-modal {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  padding: 30px;
+  border-radius: 5px;
+}
+
+.Confirm-delete-modal h1 {
+  margin-bottom: 10px;
+}
+
+.Confirm-delete-modal p {
+  margin-bottom: 30px;
+  font-size: large;
+}
+
+.Confirm-delete-modal button {
+  margin: 0 5px;
+  padding: 10px 20px;
+  background-color: black;
+  color: white;
+}
+
+.Confirm-delete-modal button:hover {
+  background-color: gray;
+}

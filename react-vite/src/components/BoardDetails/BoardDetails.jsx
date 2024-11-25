@@ -1,37 +1,60 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
-import { thunkGetAllBoards } from "../../redux/board";
+import { thunkGetAllBoards, thunkUpdateBoard } from "../../redux/board";
 import { thunkGetBoardLists } from "../../redux/list";
 import OpenModalButton from "../OpenModalButton";
 import CreateListModal from "../CreateListModal";
 import ListDetails from "../ListDetails";
 import "./BoardDetails.css";
 
-
 export default function BoardDetails({ boardId }) {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
-  const board = useSelector((state) => 
+  const [isEditing, setIsEditing] = useState(false);
+  const [title, setTitle] = useState("");
+
+  // Selectors
+  const board = useSelector((state) =>
     state.board.allBoards.find((board) => board.id === boardId)
   );
-  const lists = useSelector((state) => 
+  const lists = useSelector((state) =>
     state.list.allLists.filter((list) => list.board_id === boardId)
   );
 
-
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchBoardData = async () => {
       setIsLoading(true);
-      await dispatch(thunkGetAllBoards());
-      await dispatch(thunkGetBoardLists(boardId));
+      await dispatch(thunkGetAllBoards()),
+      await dispatch(thunkGetBoardLists(boardId)),
+   
       setIsLoading(false);
     };
-    fetchData();
+
+    fetchBoardData();
   }, [dispatch, boardId]);
 
-  if (isLoading) {
-    return <div className="board-details">Loading...</div>;
-  }
+  const handleTitleClick = () => {
+    setIsEditing(true);
+    setTitle(board?.title || "");
+  };
+
+  const handleTitleUpdate = async () => {
+    if (title.trim() && title !== board?.title) {
+      await dispatch(thunkUpdateBoard(boardId, title.trim()));
+    }
+    setIsEditing(false);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleTitleUpdate();
+    } else if (e.key === "Escape") {
+      setIsEditing(false);
+      setTitle(board?.title || "");
+    }
+  };
+
+  if (isLoading) return <div className="board-details">Loading...</div>;
 
   if (!board) {
     return (
@@ -43,22 +66,38 @@ export default function BoardDetails({ boardId }) {
 
   return (
     <div className="board-details">
+      {/* Board Header */}
       <div className="board-header">
-        <h2>{board.title}</h2>
-      </div>
-      <div className="lists-container">
-        {lists && lists.length > 0 ? (
-          lists.map((list) => (
-            <ListDetails 
-            key={list.id} 
-            list={list}
+        {isEditing ? (
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            onBlur={handleTitleUpdate}
+            onKeyDown={handleKeyDown}
+            autoFocus
+            className="board-title-input"
           />
+        ) : (
+          <h2 onClick={handleTitleClick} className="board-title">
+            {board.title}
+          </h2>
+        )}
+      </div>
+
+      {/* Lists Section */}
+      <div className="lists-container">
+        {lists.length > 0 ? (
+          lists.map((list) => (
+            <ListDetails key={list.id} list={list} boardId={board.id} />
           ))
         ) : (
           <p>No lists found. Create a new list to get started!</p>
         )}
-         <OpenModalButton
-          modalComponent={<CreateListModal boardId={board.id}/>}
+
+        {/* Add New List Button */}
+        <OpenModalButton
+          modalComponent={<CreateListModal boardId={board.id} />}
           buttonText="+ Add another list"
         />
       </div>

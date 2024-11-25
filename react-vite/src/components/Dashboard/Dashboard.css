@@ -1,10 +1,4 @@
-.dashboard {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-}
-
 .dashboard-container {
   display: flex;
-  flex: 1;
+  height: 100vh;
 }

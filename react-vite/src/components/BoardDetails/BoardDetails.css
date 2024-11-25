@@ -13,3 +13,21 @@
   overflow-x: auto;
   padding: 10px;
 }
+
+.board-header h2 {
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 3px;
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+}
+
+
+.board-title-input {
+  font-size: 24px;
+  font-weight: bold;
+  padding: 8px;
+  border-radius: 3px;
+}
+

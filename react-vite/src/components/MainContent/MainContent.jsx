@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { thunkGetAllBoards } from "../../redux/board";
 import OpenModalButton from "../OpenModalButton";
-import CreateBoardModal from "../CreateBoardModal";
+import CreateItemModal from "../CreateItemModal";
 import "./MainContent.css";
 
 export default function MainContent({ onBoardSelect }) {
@@ -30,7 +30,7 @@ export default function MainContent({ onBoardSelect }) {
         ))}
         <div className="add-board-container">
         <OpenModalButton
-          modalComponent={<CreateBoardModal />}
+          modalComponent={<CreateItemModal type="board"/>}
           buttonText="+ Create New Board"
         />
         </div>

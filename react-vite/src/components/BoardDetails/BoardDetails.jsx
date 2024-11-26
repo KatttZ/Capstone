@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { thunkGetAllBoards, thunkUpdateBoard } from "../../redux/board";
 import { thunkGetBoardLists } from "../../redux/list";
 import OpenModalButton from "../OpenModalButton";
-import CreateListModal from "../CreateListModal";
+import CreateItemModal from "../CreateItemModal";
 import ListDetails from "../ListDetails";
 import "./BoardDetails.css";
 
@@ -93,8 +93,8 @@ export default function BoardDetails({ boardId }) {
         {/* Add New List Section */}
         <div className="add-list-container">
           <OpenModalButton
-            modalComponent={<CreateListModal boardId={board.id} />}
-            buttonText="+ Add a new list"
+            modalComponent={<CreateItemModal type="list" boardId={board.id} />}
+            buttonText="+ Add New List"
           />
         </div>
       </div>

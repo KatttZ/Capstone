@@ -1,0 +1,52 @@
+.board-details {
+  flex: 1;
+}
+
+.board-header {
+  background-color: #DA62AC;
+  padding: 10px;
+}
+
+.board-header h2 {
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 3px;
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.board-title-input {
+  font-size: 24px;
+  font-weight: bold;
+  padding: 8px;
+  border-radius: 3px;
+}
+
+.lists-container {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding: 10px;
+  align-items: flex-start; 
+}
+
+.add-list-container {
+  flex-shrink: 0; 
+}
+
+.add-list-container button {
+  min-width: 200px;
+  border:none;
+  padding: 10px;
+  background-color: hsla(0, 3%, 92%, 0.499);
+  border-radius: 5px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+@media screen and (max-width: 768px) {
+  .lists-container {
+    flex-direction: column;
+    gap: 20px;
+  }
+}

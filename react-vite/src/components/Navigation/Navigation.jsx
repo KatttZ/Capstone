@@ -3,16 +3,23 @@ import ProfileButton from "./ProfileButton";
 import "./Navigation.css";
 
 function Navigation() {
-  return (
-    <ul>
-      <li>
-        <NavLink to="/">Home</NavLink>
-      </li>
 
-      <li>
-        <ProfileButton />
-      </li>
+  return (
+    <nav className="navigation-bar">
+      <ul className="nav-bar-elements">
+        <li className='logo-container'>
+          <NavLink to="/">
+            <img src='/logo.png' alt="Logo" className="logo" />
+          </NavLink>
+        </li>
+
+        <li>
+          <ProfileButton />
+        </li>
     </ul>
+
+    </nav>
+   
   );
 }
 

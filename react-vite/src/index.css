@@ -1,5 +1,13 @@
 /* TODO: Add sitewide styles */
+ul {
+    list-style-type: none;
+}
+
 
 button {
     cursor: pointer;
+}
+
+body {
+    margin: 0;
 }

@@ -130,7 +130,6 @@ export const thunkDeleteList = (listId) => async (dispatch) => {
 // Reducer
 const initialState = {
   allLists: [],
-  currentList: null,
 };
 
 const listReducer = (state = initialState, action) => {
@@ -138,7 +137,7 @@ const listReducer = (state = initialState, action) => {
     case GET_BOARD_LISTS:
       return {
         ...state,
-        allLists: action.payload.lists, // Assuming the payload contains a `lists` array
+        allLists: action.payload.lists, 
       };
 
     case ADD_BOARD_LIST:
@@ -147,35 +146,25 @@ const listReducer = (state = initialState, action) => {
         allLists: [...state.allLists, action.payload],
       };
 
-    case GET_LIST:
-      return {
-        ...state,
-        currentList: action.payload,
-      };
-
     case UPDATE_LIST:
       return {
         ...state,
         allLists: state.allLists.map((list) =>
           list.id === action.payload.id ? action.payload : list
         ),
-        currentList:
-          state.currentList && state.currentList.id === action.payload.id
-            ? action.payload
-            : state.currentList,
       };
 
     case DELETE_LIST:
       return {
         ...state,
         allLists: state.allLists.filter((list) => list.id !== action.payload),
-        currentList:
-          state.currentList?.id === action.payload ? null : state.currentList,
       };
 
     default:
       return state;
   }
 };
+
+
 
 export default listReducer;

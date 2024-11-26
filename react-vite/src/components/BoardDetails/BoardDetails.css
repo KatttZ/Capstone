@@ -3,8 +3,8 @@
 }
 
 .board-header {
-  background-color: rgb(91, 148, 201);
-    padding: 10px;
+  background-color: #DA62AC;
+  padding: 10px;
 }
 
 .lists-container {
@@ -12,8 +12,8 @@
   gap: 20px;
   overflow-x: auto;
   padding: 10px;
+  align-items: flex-start; 
 }
-
 .board-header h2 {
   cursor: pointer;
   padding: 8px;
@@ -23,7 +23,6 @@
   margin: 0;
 }
 
-
 .board-title-input {
   font-size: 24px;
   font-weight: bold;
@@ -31,3 +30,15 @@
   border-radius: 3px;
 }
 
+.add-list-container {
+  flex-shrink: 0; 
+}
+
+.add-list-container button {
+  min-width: 200px;
+  border:none;
+  padding: 10px;
+  background-color: hsla(0, 3%, 92%, 0.499);
+  border-radius: 5px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}

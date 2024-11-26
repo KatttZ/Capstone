@@ -13,7 +13,6 @@ export default function BoardDetails({ boardId }) {
   const [isEditing, setIsEditing] = useState(false);
   const [title, setTitle] = useState("");
 
-  // Selectors
   const board = useSelector((state) =>
     state.board.allBoards.find((board) => board.id === boardId)
   );
@@ -25,9 +24,8 @@ export default function BoardDetails({ boardId }) {
     const fetchBoardData = async () => {
       setIsLoading(true);
       await dispatch(thunkGetAllBoards()),
-      await dispatch(thunkGetBoardLists(boardId)),
-   
-      setIsLoading(false);
+        await dispatch(thunkGetBoardLists(boardId)),
+        setIsLoading(false);
     };
 
     fetchBoardData();
@@ -87,19 +85,18 @@ export default function BoardDetails({ boardId }) {
 
       {/* Lists Section */}
       <div className="lists-container">
-        {lists.length > 0 ? (
+        {lists.length > 0 &&
           lists.map((list) => (
             <ListDetails key={list.id} list={list} boardId={board.id} />
-          ))
-        ) : (
-          <p>No lists found. Create a new list to get started!</p>
-        )}
+          ))}
 
-        {/* Add New List Button */}
-        <OpenModalButton
-          modalComponent={<CreateListModal boardId={board.id} />}
-          buttonText="+ Add another list"
-        />
+        {/* Add New List Section */}
+        <div className="add-list-container">
+          <OpenModalButton
+            modalComponent={<CreateListModal boardId={board.id} />}
+            buttonText="+ Add a new list"
+          />
+        </div>
       </div>
     </div>
   );

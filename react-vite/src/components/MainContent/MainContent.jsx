@@ -28,11 +28,12 @@ export default function MainContent({ onBoardSelect }) {
             {board.title}
           </div>
         ))}
-
+        <div className="add-board-container">
         <OpenModalButton
           modalComponent={<CreateBoardModal />}
           buttonText="+ Create New Board"
         />
+        </div>
       </div>
     </div>
   );

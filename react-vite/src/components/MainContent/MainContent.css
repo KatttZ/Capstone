@@ -30,22 +30,14 @@
   background-color: #d4d8dc;
 }
 
-.board-lists-container button {
-  border:none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.add-board-container {
+  flex-shrink: 0; 
+}
+
+.add-board-container button {
   height: 100px;
+  background: #ebecf0;
+  border:none;
   border-radius: 5px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  background-color: #e2e6ea;
-  color: #333;
-  font-style: italic;
+  padding: 10px;
 }
-
-.board-lists-container button:hover {
-  background-color: #d4d8dc;
-}
-
-

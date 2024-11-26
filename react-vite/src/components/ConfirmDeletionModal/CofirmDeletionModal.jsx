@@ -2,6 +2,7 @@ import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
 import { thunkDeleteBoard } from "../../redux/board";
 import { thunkDeleteList } from "../../redux/list";
+import { thunkDeleteCard } from "../../redux/card";
 import "./ConfirmDeletionModal.css";
 
 function ConfirmDeletionModal({ itemId, itemType, onDeleteSuccess }) {
@@ -18,6 +19,9 @@ function ConfirmDeletionModal({ itemId, itemType, onDeleteSuccess }) {
         await onDeleteSuccess();
       }
     } 
+    if (itemType === 'card') {
+      await dispatch(thunkDeleteCard(itemId));
+    }
     closeModal();
   };
 

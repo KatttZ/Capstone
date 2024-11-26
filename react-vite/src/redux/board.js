@@ -130,7 +130,6 @@ export const thunkDeleteBoard = (boardId) => async (dispatch) => {
 // Reducer
 const initialState = {
   allBoards: [],
-  singleBoard: null,
   count: 0,
 };
 
@@ -141,12 +140,6 @@ const boardReducer = (state = initialState, action) => {
         ...state,
         allBoards: action.payload.boards,
         count: action.payload.count,
-      };
-
-    case GET_BOARD:
-      return {
-        ...state,
-        singleBoard: action.payload,
       };
 
     case ADD_BOARD:
@@ -162,7 +155,6 @@ const boardReducer = (state = initialState, action) => {
         allBoards: state.allBoards.map((board) =>
           board.id === action.payload.id ? action.payload : board
         ),
-        singleBoard: action.payload,
       };
 
     case DELETE_BOARD:
@@ -172,7 +164,6 @@ const boardReducer = (state = initialState, action) => {
           (board) => board.id !== action.payload
         ),
         count: state.count - 1,
-        singleBoard: null,
       };
 
     default:

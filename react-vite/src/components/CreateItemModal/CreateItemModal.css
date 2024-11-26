@@ -1,0 +1,24 @@
+.create-item-modal {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 30px;
+    border-radius: 5px;
+}
+
+
+.create-item-modal form {
+    display: flex;
+    flex-direction: column;
+    gap:10px;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.create-item-modal form input {
+    margin-left: 10px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}

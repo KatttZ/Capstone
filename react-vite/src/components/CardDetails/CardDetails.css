@@ -1,0 +1,15 @@
+.card {
+  display: flex;
+  justify-content: space-between;
+  background-color: white;
+  border-radius: 3px;
+  box-shadow: 0 1px 0 rgba(9, 30, 66, 0.25);
+  margin-bottom: 8px;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.card button {
+  border:none;
+  background-color: transparent;
+}

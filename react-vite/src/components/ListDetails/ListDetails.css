@@ -12,6 +12,16 @@
   padding: 0 8px;
 }
 
+.list-upper-container button {
+  border:none;
+  background-color: transparent;
+}
+
+.list-upper-container button:hover {
+  background-color: #110e0e3d;
+  border-radius: 3px;
+}
+
 .list h3 {
   font-size: 15px;
 }

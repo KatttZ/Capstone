@@ -1,5 +1,7 @@
 import { FaTrashCan } from "react-icons/fa6";
+import { MdOutlineEdit } from "react-icons/md";
 import OpenModalButton from "../OpenModalButton";
+import EditCardModal from "../EditCardModal";
 import ConfirmDeletionModal from "../ConfirmDeletionModal";
 
 import './CardDetails.css';
@@ -10,6 +12,14 @@ export default function CardDetails({ card, listId }) {
     return (
         <div className="card">
             <div>{card.title }</div>
+            <div className="card-action">
+            <OpenModalButton
+                modalComponent={
+                    <EditCardModal/>
+                }
+                onButtonClick={(e) => e.stopPropagation()}
+                buttonText={<MdOutlineEdit/>}
+            />
             <OpenModalButton
                 modalComponent={
                     <ConfirmDeletionModal
@@ -21,6 +31,7 @@ export default function CardDetails({ card, listId }) {
                 onButtonClick={(e) => e.stopPropagation()}
                 buttonText={<FaTrashCan/>}
             />
+            </div>
         </div>
     );
 }

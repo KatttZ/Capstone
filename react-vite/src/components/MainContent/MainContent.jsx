@@ -16,7 +16,7 @@ export default function MainContent({ onBoardSelect }) {
 
   return (
     <div className="main-content">
-      <h2>{user.username}&apos;s Workspace</h2>
+      <h1>{user.username}&apos;s Workspace</h1>
       <h2>Boards</h2>
       <div className="board-grid">
         {boards.map((board) => (

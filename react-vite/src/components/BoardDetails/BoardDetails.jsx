@@ -85,7 +85,7 @@ export default function BoardDetails({ boardId }) {
 
       {/* Lists Section */}
       <div className="lists-container">
-        {lists.length > 0 &&
+        {lists &&
           lists.map((list) => (
             <ListDetails key={list.id} list={list} boardId={board.id} />
           ))}

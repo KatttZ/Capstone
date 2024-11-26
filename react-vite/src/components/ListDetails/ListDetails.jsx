@@ -105,7 +105,7 @@ export default function ListDetails({ list, boardId }) {
       </div>
       {/* Cards Section */}
       <div className="cards-container">
-        {cards.length &&
+        {cards &&
           cards.map((card) => (
             <CardDetails key={card.id} card={card} listId={list.id} />
           ))}

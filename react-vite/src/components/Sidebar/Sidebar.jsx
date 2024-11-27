@@ -40,7 +40,6 @@ export default function Sidebar({ onBoardsClick, onBoardSelect }) {
                 <OpenModalButton
                   modalComponent={<ConfirmDeletionModal itemId={board.id} itemType='board' />}
                   buttonText="Delete"
-                  onButtonClick={(e) => e.stopPropagation()}
                 />
               </div>
             </li>

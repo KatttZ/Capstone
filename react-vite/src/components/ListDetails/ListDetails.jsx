@@ -13,6 +13,7 @@ export default function ListDetails({ list, boardId }) {
   const [title, setTitle] = useState(list?.title || "");
   const [isAddingCard, setIsAddingCard] = useState(false);
   const [newCardTitle, setNewCardTitle] = useState("");
+  const [errors, setErrors] = useState("");
 
   const cards = useSelector((state) =>
     state.card.allCards.filter((card) => card.list_id === list.id)
@@ -58,14 +59,25 @@ export default function ListDetails({ list, boardId }) {
 
   const handleCardSubmit = (e) => {
     e.preventDefault();
-
-    if (newCardTitle.trim()) {
-      dispatch(thunkAddListCard(list.id, newCardTitle.trim()));
-      setNewCardTitle("");
+    
+    const trimmedTitle = newCardTitle.trim();
+    if (!trimmedTitle) {
+      setErrors({ card: "Card title cannot be empty." });
+      return;
     }
-
+    
+    if (trimmedTitle.length > 25) {
+      setErrors({ card: "Card title should be 25 characters or less." });
+      return;
+    }
+    
+    dispatch(thunkAddListCard(list.id, trimmedTitle));
+    setNewCardTitle("");
+    setErrors(""); 
     setIsAddingCard(false);
   };
+  
+
 
   return (
     <div className="list">
@@ -99,7 +111,6 @@ export default function ListDetails({ list, boardId }) {
               />
             }
             buttonText="–"
-            onButtonClick={(e) => e.stopPropagation()}
           />
         </div>
       </div>
@@ -120,12 +131,13 @@ export default function ListDetails({ list, boardId }) {
               placeholder="Enter a title for this card..."
               autoFocus
             />
+            {errors?.card && <p className="error-text">{errors.card}</p>}
             <div className="add-card-controls">
               <button onClick={handleCardSubmit} className="add-card-submit">
                 Add card
               </button>
               <button
-                onClick={() => setIsAddingCard(false)}
+                onClick={() => {setIsAddingCard(false); setErrors(""); setNewCardTitle("");}}
                 className="add-card-cancel"
               >
                 ✕

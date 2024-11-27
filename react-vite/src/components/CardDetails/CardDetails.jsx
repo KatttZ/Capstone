@@ -17,7 +17,6 @@ export default function CardDetails({ card, listId }) {
                 modalComponent={
                     <EditCardModal/>
                 }
-                onButtonClick={(e) => e.stopPropagation()}
                 buttonText={<MdOutlineEdit/>}
             />
             <OpenModalButton
@@ -28,7 +27,6 @@ export default function CardDetails({ card, listId }) {
                         listId={listId}
                     />
                 }
-                onButtonClick={(e) => e.stopPropagation()}
                 buttonText={<FaTrashCan/>}
             />
             </div>

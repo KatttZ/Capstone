@@ -19,8 +19,15 @@ function CreateItemModal({ type, boardId }) {
     e.preventDefault();
     setErrors(null);
 
-    if (!title.trim()) {
+    const trimmedTitle = title.trim();
+
+    if (!trimmedTitle) {
       setErrors({ title: "Title is required" });
+      return;
+    }
+  
+    if (trimmedTitle.length > 25) {
+      setErrors({ title: "Title should be 25 characters or less" });
       return;
     }
 

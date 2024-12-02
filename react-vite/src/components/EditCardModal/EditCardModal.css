@@ -1,0 +1,97 @@
+.edit-card-container {
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
+  width: 500px;
+}
+
+.card-description {
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+.card-description p {
+  font-weight: bold;
+}
+
+.card-description {
+  margin: 20px 0;
+}
+
+.description-display {
+  cursor: pointer;
+  padding: 8px;
+  min-height: 60px;
+  border-radius: 3px;
+  color: #5e6c84;
+}
+
+.description-display:hover {
+  background-color: #ebecf0;
+}
+
+.card-description-input {
+  width: 100%;
+  min-height: 80px;
+  border-radius: 3px;
+  resize: vertical;
+  margin-bottom: 8px;
+}
+
+.description-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.save-description {
+  background-color: #0079bf;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 3px;
+}
+
+.cancel-description {
+  background-color: transparent;
+  border: none;
+}
+
+.comment-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.card-comments {
+  border-top: 1px solid #e0e0e0;
+  padding-top: 15px;
+  max-height: 400px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-comments div {
+  color: #888;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.comment {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fafafa;
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.comment-date {
+  font-size: 0.8rem;
+  color: #aaa;
+}

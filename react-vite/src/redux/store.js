@@ -9,12 +9,14 @@ import sessionReducer from "./session";
 import boardReducer from "./board";
 import listReducer from "./list";
 import cardReducer from "./card";
+import commentReducer from "./comment";
 
 const rootReducer = combineReducers({
   session: sessionReducer,
   board: boardReducer,
   list: listReducer,
   card: cardReducer,
+  comment: commentReducer,
 });
 
 let enhancer;

@@ -20,9 +20,9 @@ class Card(db.Model):
     # relationships
     list = db.relationship('List', back_populates='cards')
     comments = db.relationship('Comment', back_populates='card', cascade='all, delete-orphan')
-    labels = db.relationship('Label', secondary='card_labels', back_populates='cards')
+    # labels = db.relationship('Label', secondary='card_labels', back_populates='cards')
 
-    def to_dict(self, include_comments=False, include_labels=False):
+    def to_dict(self, include_comments=False):
         card_dict = {
             'id': self.id,
             'title': self.title,
@@ -36,8 +36,8 @@ class Card(db.Model):
         if include_comments:
             card_dict['comments'] = [comment.to_dict() for comment in self.comments]
        
-        if include_labels:
-            card_dict['labels'] = [label.to_dict() for label in self.labels]
+        # if include_labels:
+        #     card_dict['labels'] = [label.to_dict() for label in self.labels]
         
         return card_dict
     

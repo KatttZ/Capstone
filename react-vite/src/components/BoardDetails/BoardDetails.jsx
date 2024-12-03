@@ -2,7 +2,7 @@ import { DragDropContext, Droppable, Draggable } from "../../../node_modules/@he
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { thunkGetAllBoards, thunkUpdateBoard } from "../../redux/board";
-import { thunkGetBoardLists, thunkReorderLists } from "../../redux/list";
+import { thunkGetBoardLists, thunkReorderLists, reorderLists} from "../../redux/list";
 import OpenModalButton from "../OpenModalButton";
 import CreateItemModal from "../CreateItemModal";
 import ListDetails from "../ListDetails";
@@ -57,23 +57,23 @@ export default function BoardDetails({ boardId }) {
   };
 
 
-  const handleDragEnd = async (result) => {
-    const { destination, source } = result;
+const handleDragEnd = async (result) => {
+  const { destination, source} = result;
   
-    // No movement occurred
-    if (!destination || destination.index === source.index) return;
+  if (!destination || destination.index === source.index ) return;
   
-    // Create a copy of the lists array for manipulation
-    const updatedLists = Array.from(lists);
-    const [movedList] = updatedLists.splice(source.index, 1); // Remove from source
-    updatedLists.splice(destination.index, 0, movedList); // Insert at destination
+  const updatedLists = Array.from(lists);
+  const [movedList] = updatedLists.splice(source.index, 1);
+  updatedLists.splice(destination.index, 0, movedList);
   
-    // Prepare reordered list IDs
-    const reorderedListIds = updatedLists.map((list) => list.id);
-  
-    // Dispatch action to update the backend and store
-    await dispatch(thunkReorderLists(boardId, reorderedListIds));
-  };
+  dispatch(reorderLists(updatedLists));
+
+  try {
+    await dispatch(thunkReorderLists(boardId, updatedLists.map(list => list.id)));
+  } catch (error) {
+    dispatch(reorderLists(lists));
+  }
+};
   
 
   if (isLoading) return <div className="board-details">Loading...</div>;

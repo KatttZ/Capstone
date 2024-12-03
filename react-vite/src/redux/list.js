@@ -49,7 +49,7 @@ const deleteList = (payload) => {
 };
 
 // action for reordering lists
-const reorderLists = (reorderedLists) => {
+export const reorderLists = (reorderedLists) => {
   return {
     type: REORDER_LISTS,
     payload: reorderedLists,

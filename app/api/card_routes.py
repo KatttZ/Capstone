@@ -92,39 +92,6 @@ def delete_card(card_id):
     db.session.commit()
     return {'message': 'Card deleted'}  
 
-@card_routes.route('/<int:card_id>/move', methods=['PUT'])
-@login_required
-def move_card(card_id):
-    card = Card.query.get(card_id)
-    if not card or card.list.board.user_id != current_user.id:
-        return {'errors': 'Unauthorized'}, 401
-
-    data = request.get_json()
-    dest_list_id = data.get('destListId')
-    dest_index = data.get('destIndex')
-
-    if not all([dest_list_id, isinstance(dest_index, int)]):
-        return {'errors': 'Missing required fields'}, 400
-
-    # Update source list positions
-    Card.query.filter(
-        Card.list_id == card.list_id,
-        Card.position > card.position
-    ).update({Card.position: Card.position - 1}, synchronize_session='fetch')
-
-    # Update destination list positions
-    Card.query.filter(
-        Card.list_id == dest_list_id,
-        Card.position >= dest_index + 1
-    ).update({Card.position: Card.position + 1}, synchronize_session='fetch')
-
-    # Update card position and list
-    card.list_id = dest_list_id
-    card.position = dest_index + 1
-    
-    db.session.commit()
-    return card.to_dict()
-
 
 
 

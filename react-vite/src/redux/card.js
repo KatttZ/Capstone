@@ -126,52 +126,23 @@ export const thunkDeleteCard = (cardId) => async (dispatch) => {
     }
 }
 
-export const thunkReorderCards = (listId, cardOrder) => async (dispatch) => {
+export const thunkUpdateCardOrder = (listId, cardOrder) => async (dispatch) => {
     try {
-        const res = await fetch(`/api/lists/${listId}/reorder-cards`, {
-            method: "PUT",
-            headers: { 
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ cardOrder }),
-            credentials: 'include'
-        });
+      const res = await fetch(`/api/lists/${listId}/cards/reorder`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cardOrder }),
+      });
 
-        if (!res.ok) throw res;
-        const data = await res.json();
-        dispatch(getListCards({ list_id: listId, cards: data.cards }));
-        return data;
+      if (res.ok) {
+        dispatch(thunkGetListCards(listId));
+      }
     } catch (error) {
-        console.error("Error reordering cards:", error);
-        return { errors: ['Failed to reorder cards'] };
+      console.error("Failed to reorder cards:", error);
     }
-};
+  };
+  
 
-export const thunkMoveCard = (cardId, destListId, destIndex) => async (dispatch) => {
-    try {
-        const res = await fetch(`/api/cards/${cardId}/move`, {
-            method: "PUT",
-            headers: { 
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ destListId, destIndex }),
-            credentials: 'include'
-        });
-
-        if (!res.ok) throw res;
-        const data = await res.json();
-        
-        // Refresh both source and destination lists
-        await dispatch(thunkGetListCards(data.source_list_id));
-        if (data.source_list_id !== destListId) {
-            await dispatch(thunkGetListCards(destListId));
-        }
-        return data;
-    } catch (error) {
-        console.error("Error moving card:", error);
-        return { errors: ['Failed to move card'] };
-    }
-};
 
 // Reducer
 const initialState = {

@@ -1,10 +1,11 @@
+import { DragDropContext, Droppable, Draggable } from "../../../node_modules/@hello-pangea/dnd";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import OpenModalButton from "../OpenModalButton";
 import ConfirmDeletionModal from "../ConfirmDeletionModal";
 import CardDetails from "../CardDetails";
 import { thunkGetBoardLists, thunkUpdateList } from "../../redux/list";
-import { thunkGetListCards, thunkAddListCard } from "../../redux/card";
+import { thunkGetListCards, thunkAddListCard, thunkUpdateCardOrder } from "../../redux/card";
 import "./ListDetails.css";
 
 export default function ListDetails({ list, boardId, dragHandleProps }) {
@@ -77,6 +78,26 @@ export default function ListDetails({ list, boardId, dragHandleProps }) {
     setIsAddingCard(false);
   };
   
+  const handleCardDragEnd = async (result) => {
+    const { source, destination } = result;
+
+    if (!destination) return;
+    if (
+      source.droppableId === destination.droppableId &&
+      source.index === destination.index
+    )
+      return;
+
+    const updatedCards = Array.from(cards);
+    const [movedCard] = updatedCards.splice(source.index, 1);
+    updatedCards.splice(destination.index, 0, movedCard);
+
+    // Pass just the card IDs in order
+    const cardOrder = updatedCards.map(card => card.id);
+    
+    dispatch(thunkUpdateCardOrder(list.id, cardOrder));
+  };
+  
 
 
   return (
@@ -116,20 +137,45 @@ export default function ListDetails({ list, boardId, dragHandleProps }) {
         </div>
       </div>
       {/* Cards Section */}
-      <div className="cards-container">
-        {cards &&
-          cards.map((card) => (
-            <CardDetails key={card.id} card={card} listId={list.id} />
-          ))}
 
-        {/* Add Card Button */}
+      <DragDropContext onDragEnd={handleCardDragEnd}>
+      <Droppable droppableId={list.id.toString()} type="CARD">
+        {(provided) => (
+          <div
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+            className="cards-container"
+          >
+            {cards.map((card, index) => (
+              <Draggable
+                key={card.id}
+                draggableId={card.id.toString()}
+                index={index}
+              >
+                {(provided) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                  >
+                    <CardDetails card={card} listId={list.id} />
+                  </div>
+                )}
+              </Draggable>
+            ))}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
+
+      <div className="add-card-section">
         {isAddingCard ? (
           <div className="add-card-form">
             <textarea
-              className="card-input"
               value={newCardTitle}
               onChange={(e) => setNewCardTitle(e.target.value)}
               placeholder="Enter a title for this card..."
+              className="card-input"
               autoFocus
             />
             {errors?.card && <p className="error-text">{errors.card}</p>}
@@ -138,7 +184,11 @@ export default function ListDetails({ list, boardId, dragHandleProps }) {
                 Add card
               </button>
               <button
-                onClick={() => {setIsAddingCard(false); setErrors(""); setNewCardTitle("");}}
+                onClick={() => {
+                  setIsAddingCard(false);
+                  setErrors("");
+                  setNewCardTitle("");
+                }}
                 className="add-card-cancel"
               >
                 ✕
@@ -154,6 +204,7 @@ export default function ListDetails({ list, boardId, dragHandleProps }) {
           </button>
         )}
       </div>
+      </DragDropContext>
     </div>
   );
 }

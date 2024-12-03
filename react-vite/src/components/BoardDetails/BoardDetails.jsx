@@ -1,7 +1,8 @@
+import { DragDropContext, Droppable, Draggable } from "../../../node_modules/@hello-pangea/dnd";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { thunkGetAllBoards, thunkUpdateBoard } from "../../redux/board";
-import { thunkGetBoardLists } from "../../redux/list";
+import { thunkGetBoardLists, thunkReorderLists } from "../../redux/list";
 import OpenModalButton from "../OpenModalButton";
 import CreateItemModal from "../CreateItemModal";
 import ListDetails from "../ListDetails";
@@ -12,6 +13,7 @@ export default function BoardDetails({ boardId }) {
   const [isLoading, setIsLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [title, setTitle] = useState("");
+
 
   const board = useSelector((state) =>
     state.board.allBoards.find((board) => board.id === boardId)
@@ -24,12 +26,14 @@ export default function BoardDetails({ boardId }) {
     const fetchBoardData = async () => {
       setIsLoading(true);
       await dispatch(thunkGetAllBoards()),
-        await dispatch(thunkGetBoardLists(boardId)),
-        setIsLoading(false);
+      await dispatch(thunkGetBoardLists(boardId)),
+      setIsLoading(false);
     };
 
     fetchBoardData();
   }, [dispatch, boardId]);
+
+
 
   const handleTitleClick = () => {
     setIsEditing(true);
@@ -51,6 +55,26 @@ export default function BoardDetails({ boardId }) {
       setTitle(board?.title || "");
     }
   };
+
+
+  const handleDragEnd = async (result) => {
+    const { destination, source } = result;
+  
+    // No movement occurred
+    if (!destination || destination.index === source.index) return;
+  
+    // Create a copy of the lists array for manipulation
+    const updatedLists = Array.from(lists);
+    const [movedList] = updatedLists.splice(source.index, 1); // Remove from source
+    updatedLists.splice(destination.index, 0, movedList); // Insert at destination
+  
+    // Prepare reordered list IDs
+    const reorderedListIds = updatedLists.map((list) => list.id);
+  
+    // Dispatch action to update the backend and store
+    await dispatch(thunkReorderLists(boardId, reorderedListIds));
+  };
+  
 
   if (isLoading) return <div className="board-details">Loading...</div>;
 
@@ -84,20 +108,46 @@ export default function BoardDetails({ boardId }) {
       </div>
 
       {/* Lists Section */}
-      <div className="lists-container">
-        {lists &&
-          lists.map((list) => (
-            <ListDetails key={list.id} list={list} boardId={board.id} />
-          ))}
+      <DragDropContext onDragEnd={handleDragEnd}>
+        <Droppable droppableId="board-lists" direction="horizontal" type="LIST">
+          {(provided) => (
+            <div
+              className="lists-container"
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+            >
+              {lists.map((list, index) => (
+                <Draggable
+                  key={list.id}
+                  draggableId={list.id.toString()}
+                  index={index}
+                >
+                  {(provided) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                    >
+                      <ListDetails key={list.id} list={list} boardId={board.id} />
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
 
-        {/* Add New List Section */}
-        <div className="add-list-container">
-          <OpenModalButton
-            modalComponent={<CreateItemModal type="list" boardId={board.id} />}
-            buttonText="+ Add New List"
-          />
-        </div>
-      </div>
+              {/* Add New List Section */}
+              <div className="add-list-container">
+                <OpenModalButton
+                  modalComponent={
+                    <CreateItemModal type="list" boardId={board.id} />
+                  }
+                  buttonText="+ Add New List"
+                />
+              </div>
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
     </div>
   );
 }

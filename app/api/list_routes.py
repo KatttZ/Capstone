@@ -148,3 +148,25 @@ def create_card(list_id):
     db.session.add(card)
     db.session.commit()
     return card.to_dict()
+
+@list_routes.route('/<int:list_id>/cards/reorder', methods=['PUT'])
+@login_required
+def reorder_cards(list_id):
+    list = List.query.get(list_id)
+    if not list or list.board.user_id != current_user.id:
+        return {'errors': 'Unauthorized'}, 401
+
+    data = request.get_json()
+    card_order = data.get('cardOrder')
+    
+    if not card_order:
+        return {'errors': 'Card order is required'}, 400
+
+    # Update positions
+    for index, card_id in enumerate(card_order, start=1):
+        card = Card.query.get(card_id)
+        if card and card.list_id == list_id:
+            card.position = index
+
+    db.session.commit()
+    return {'cards': [card.to_dict() for card in Card.query.filter_by(list_id=list_id).order_by(Card.position).all()]}

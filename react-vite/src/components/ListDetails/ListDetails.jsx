@@ -7,7 +7,7 @@ import { thunkGetBoardLists, thunkUpdateList } from "../../redux/list";
 import { thunkGetListCards, thunkAddListCard } from "../../redux/card";
 import "./ListDetails.css";
 
-export default function ListDetails({ list, boardId }) {
+export default function ListDetails({ list, boardId, dragHandleProps }) {
   const dispatch = useDispatch();
   const [isEditing, setIsEditing] = useState(false);
   const [title, setTitle] = useState(list?.title || "");
@@ -81,7 +81,8 @@ export default function ListDetails({ list, boardId }) {
 
   return (
     <div className="list">
-      <div className="list-upper-container">
+      <div className="list-upper-container"  
+        {...dragHandleProps}>
         <div className="list-header">
           {isEditing ? (
             <input

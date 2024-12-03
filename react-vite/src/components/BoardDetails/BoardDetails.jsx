@@ -126,9 +126,8 @@ const handleDragEnd = async (result) => {
                     <div
                       ref={provided.innerRef}
                       {...provided.draggableProps}
-                      {...provided.dragHandleProps}
                     >
-                      <ListDetails key={list.id} list={list} boardId={board.id} />
+                      <ListDetails key={list.id} list={list} boardId={board.id} dragHandleProps={provided.dragHandleProps}/>
                     </div>
                   )}
                 </Draggable>

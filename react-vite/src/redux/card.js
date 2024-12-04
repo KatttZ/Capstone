@@ -126,26 +126,10 @@ export const thunkDeleteCard = (cardId) => async (dispatch) => {
   }
 };
 
-export const thunkUpdateCardOrder = (listId, cardOrder) => async (dispatch) => {
-  try {
-    const res = await fetch(`/api/lists/${listId}/cards/reorder`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ cardOrder }),
-    });
-
-    if (res.ok) {
-      dispatch(thunkGetListCards(listId));
-    }
-  } catch (error) {
-    console.error("Failed to reorder cards:", error);
-  }
-};
 
 export const thunkMoveCard =
   (cardId, destListId, destIndex) => async (dispatch) => {
     try {
-      console.log("Move Card Payload:", { cardId, destListId, destIndex });
 
       const res = await fetch(`/api/cards/${cardId}/move`, {
         method: "PUT",

@@ -1,14 +1,14 @@
-import { DragDropContext, Droppable, Draggable } from "../../../node_modules/@hello-pangea/dnd";
+import { Droppable, Draggable } from "../../../node_modules/@hello-pangea/dnd";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import OpenModalButton from "../OpenModalButton";
 import ConfirmDeletionModal from "../ConfirmDeletionModal";
 import CardDetails from "../CardDetails";
 import { thunkGetBoardLists, thunkUpdateList } from "../../redux/list";
-import { thunkGetListCards, thunkAddListCard, thunkUpdateCardOrder } from "../../redux/card";
+import { thunkGetListCards, thunkAddListCard} from "../../redux/card";
 import "./ListDetails.css";
 
-export default function ListDetails({ list, boardId, dragHandleProps }) {
+export default function ListDetails({ list, boardId }) {
   const dispatch = useDispatch();
   const [isEditing, setIsEditing] = useState(false);
   const [title, setTitle] = useState(list?.title || "");
@@ -78,32 +78,10 @@ export default function ListDetails({ list, boardId, dragHandleProps }) {
     setIsAddingCard(false);
   };
   
-  const handleCardDragEnd = async (result) => {
-    const { source, destination } = result;
-
-    if (!destination) return;
-    if (
-      source.droppableId === destination.droppableId &&
-      source.index === destination.index
-    )
-      return;
-
-    const updatedCards = Array.from(cards);
-    const [movedCard] = updatedCards.splice(source.index, 1);
-    updatedCards.splice(destination.index, 0, movedCard);
-
-    // Pass just the card IDs in order
-    const cardOrder = updatedCards.map(card => card.id);
-    
-    dispatch(thunkUpdateCardOrder(list.id, cardOrder));
-  };
-  
-
 
   return (
     <div className="list">
-      <div className="list-upper-container"  
-        {...dragHandleProps}>
+      <div className="list-upper-container" >
         <div className="list-header">
           {isEditing ? (
             <input
@@ -138,7 +116,6 @@ export default function ListDetails({ list, boardId, dragHandleProps }) {
       </div>
       {/* Cards Section */}
 
-      <DragDropContext onDragEnd={handleCardDragEnd}>
       <Droppable droppableId={list.id.toString()} type="CARD">
         {(provided) => (
           <div
@@ -204,7 +181,7 @@ export default function ListDetails({ list, boardId, dragHandleProps }) {
           </button>
         )}
       </div>
-      </DragDropContext>
+
     </div>
   );
 }

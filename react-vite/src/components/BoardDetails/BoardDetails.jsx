@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { thunkGetAllBoards, thunkUpdateBoard } from "../../redux/board";
 import { thunkGetBoardLists, thunkReorderLists, reorderLists} from "../../redux/list";
+import { thunkMoveCard } from "../../redux/card";
 import OpenModalButton from "../OpenModalButton";
 import CreateItemModal from "../CreateItemModal";
 import ListDetails from "../ListDetails";
@@ -58,20 +59,38 @@ export default function BoardDetails({ boardId }) {
 
 
 const handleDragEnd = async (result) => {
-  const { destination, source} = result;
+  const { destination, source, type, draggableId } = result;
   
-  if (!destination || destination.index === source.index ) return;
-  
-  const updatedLists = Array.from(lists);
-  const [movedList] = updatedLists.splice(source.index, 1);
-  updatedLists.splice(destination.index, 0, movedList);
-  
-  dispatch(reorderLists(updatedLists));
+  if (!destination) return;
 
-  try {
-    await dispatch(thunkReorderLists(boardId, updatedLists.map(list => list.id)));
-  } catch (error) {
-    dispatch(reorderLists(lists));
+  // Handle list reordering
+  if (type === "LIST") {
+    if (destination.index === source.index) return;
+    
+    const updatedLists = Array.from(lists);
+    const [movedList] = updatedLists.splice(source.index, 1);
+    updatedLists.splice(destination.index, 0, movedList);
+    
+    dispatch(reorderLists(updatedLists));
+
+    try {
+      await dispatch(thunkReorderLists(boardId, updatedLists.map(list => list.id)));
+    } catch (error) {
+      dispatch(reorderLists(lists));
+    }
+  }
+
+  // Handle card movement
+  if (type === "CARD") {
+    try {
+      await dispatch(thunkMoveCard(
+        parseInt(draggableId),
+        parseInt(destination.droppableId),
+        destination.index
+      ));
+    } catch (error) {
+      console.error("Failed to move card:", error);
+    }
   }
 };
   
@@ -116,22 +135,24 @@ const handleDragEnd = async (result) => {
               {...provided.droppableProps}
               ref={provided.innerRef}
             >
-              {lists.map((list, index) => (
-                <Draggable
-                  key={list.id}
-                  draggableId={list.id.toString()}
-                  index={index}
-                >
-                  {(provided) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                    >
-                      <ListDetails key={list.id} list={list} boardId={board.id} dragHandleProps={provided.dragHandleProps}/>
-                    </div>
-                  )}
-                </Draggable>
-              ))}
+{lists.map((list, index) => (
+  <Draggable key={list.id} draggableId={list.id.toString()} index={index}>
+  {(provided) => (
+    <div
+      ref={provided.innerRef}
+      {...provided.draggableProps}
+    >
+      <ListDetails
+        key={list.id}
+        list={list}
+        boardId={board.id}
+        dragHandleProps={provided.dragHandleProps} 
+      />
+    </div>
+  )}
+</Draggable>
+
+))}
               {provided.placeholder}
 
               {/* Add New List Section */}

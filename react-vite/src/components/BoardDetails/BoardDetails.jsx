@@ -58,24 +58,29 @@ export default function BoardDetails({ boardId }) {
   };
 
 
-const handleDragEnd = async (result) => {
-  const { destination, type, draggableId } = result;
+  const handleDragEnd = async (result) => {
+    const { destination, source, type, draggableId } = result;
+    
+    if (!destination) return;
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) return;
   
-  if (!destination) return;
-
-  // Handle card movement
-  if (type === "CARD") {
-    try {
-      await dispatch(thunkMoveCard(
-        parseInt(draggableId),
-        parseInt(destination.droppableId),
-        destination.index
-      ));
-    } catch (error) {
-      console.error("Failed to move card:", error);
+    // Handle card movement
+    if (type === "CARD") {
+      try {
+        await dispatch(thunkMoveCard(
+          parseInt(draggableId),
+          parseInt(destination.droppableId),
+          destination.index
+        ));
+      } catch (error) {
+        console.error("Failed to move card:", error);
+      }
     }
-  }
-};
+
+  };
   
 
   if (isLoading) return <div className="board-details">Loading...</div>;

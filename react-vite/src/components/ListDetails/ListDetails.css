@@ -26,6 +26,10 @@
   font-size: 15px;
 }
 
+.list h3:hover {
+  cursor: pointer;
+}
+
 .cards-container {
   padding: 0 8px;
   margin: 8px 0;

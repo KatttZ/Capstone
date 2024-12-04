@@ -1,8 +1,8 @@
-import { DragDropContext, Droppable, Draggable } from "../../../node_modules/@hello-pangea/dnd";
+import { DragDropContext} from "../../../node_modules/@hello-pangea/dnd";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { thunkGetAllBoards, thunkUpdateBoard } from "../../redux/board";
-import { thunkGetBoardLists, thunkReorderLists, reorderLists} from "../../redux/list";
+import { thunkGetBoardLists} from "../../redux/list";
 import { thunkMoveCard } from "../../redux/card";
 import OpenModalButton from "../OpenModalButton";
 import CreateItemModal from "../CreateItemModal";
@@ -59,26 +59,9 @@ export default function BoardDetails({ boardId }) {
 
 
 const handleDragEnd = async (result) => {
-  const { destination, source, type, draggableId } = result;
+  const { destination, type, draggableId } = result;
   
   if (!destination) return;
-
-  // Handle list reordering
-  if (type === "LIST") {
-    if (destination.index === source.index) return;
-    
-    const updatedLists = Array.from(lists);
-    const [movedList] = updatedLists.splice(source.index, 1);
-    updatedLists.splice(destination.index, 0, movedList);
-    
-    dispatch(reorderLists(updatedLists));
-
-    try {
-      await dispatch(thunkReorderLists(boardId, updatedLists.map(list => list.id)));
-    } catch (error) {
-      dispatch(reorderLists(lists));
-    }
-  }
 
   // Handle card movement
   if (type === "CARD") {
@@ -126,48 +109,28 @@ const handleDragEnd = async (result) => {
         )}
       </div>
 
-      {/* Lists Section */}
-      <DragDropContext onDragEnd={handleDragEnd}>
-        <Droppable droppableId="board-lists" direction="horizontal" type="LIST">
-          {(provided) => (
-            <div
-              className="lists-container"
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-            >
-{lists.map((list, index) => (
-  <Draggable key={list.id} draggableId={list.id.toString()} index={index}>
-  {(provided) => (
-    <div
-      ref={provided.innerRef}
-      {...provided.draggableProps}
-    >
-      <ListDetails
-        key={list.id}
-        list={list}
-        boardId={board.id}
-        dragHandleProps={provided.dragHandleProps} 
-      />
-    </div>
-  )}
-</Draggable>
+    {/* Lists Section */}
+    <DragDropContext onDragEnd={handleDragEnd}>
+      <div className="lists-container">
+        {lists.map((list) => (
+          <ListDetails
+            key={list.id}
+            list={list}
+            boardId={board.id}
+          />
+        ))}
 
-))}
-              {provided.placeholder}
-
-              {/* Add New List Section */}
-              <div className="add-list-container">
-                <OpenModalButton
-                  modalComponent={
-                    <CreateItemModal type="list" boardId={board.id} />
-                  }
-                  buttonText="+ Add New List"
-                />
-              </div>
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
+        {/* Add New List Section */}
+        <div className="add-list-container">
+          <OpenModalButton
+            modalComponent={
+              <CreateItemModal type="list" boardId={board.id} />
+            }
+            buttonText="+ Add New List"
+          />
+        </div>
+      </div>
+    </DragDropContext>
     </div>
   );
 }

@@ -8,11 +8,11 @@ import ConfirmDeletionModal from "../ConfirmDeletionModal";
 
 import './CardDetails.css';
 
-export default function CardDetails({ card, listId, dragHandleProps }) {
+export default function CardDetails({ card, listId }) {
     const dispatch = useDispatch();
 
     return (
-        <div className="card" {...dragHandleProps}>
+        <div className="card">
             <div>{card.title }</div>
             <div className="card-action">
             <OpenModalButton

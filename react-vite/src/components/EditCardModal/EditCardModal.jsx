@@ -4,6 +4,9 @@ import { thunkGetCardComments, thunkAddComment } from "../../redux/comment";
 import { thunkUpdateCard } from "../../redux/card";
 import OpenModalButton from "../OpenModalButton";
 import ConfirmDeletionModal from "../ConfirmDeletionModal";
+import { RiBankCardLine } from "react-icons/ri";
+import { ImParagraphCenter } from "react-icons/im";
+import { MdOutlineInsertComment } from "react-icons/md";
 import "./EditCardModal.css";
 
 export default function EditCardModal({ card }) {
@@ -52,12 +55,16 @@ export default function EditCardModal({ card }) {
 
   return (
     <div className="edit-card-container">
-      <h3>{card.title}</h3>
-      
+      <h3>
+        <RiBankCardLine /> {card.title}
+      </h3>
+
       <div className="card-description">
-        <p>Description:</p>
+        <p>
+          <ImParagraphCenter /> Description:
+        </p>
         {isEditingDescription ? (
-          <div className="description-edit">
+          <div className>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -94,6 +101,11 @@ export default function EditCardModal({ card }) {
           </div>
         )}
       </div>
+      <div>
+        <p>
+          <MdOutlineInsertComment /> Comments:
+        </p>
+      </div>
 
       <form onSubmit={handleCommentSubmit} className="comment-form">
         <input
@@ -129,11 +141,11 @@ export default function EditCardModal({ card }) {
                   buttonText="–"
                 />
               </div>
-              <div className="comment-content">{comment?.content}</div>
+              <div>{comment?.content}</div>
             </div>
           ))
         ) : (
-          <div className="no-comments">No comments yet</div>
+          <div>No comments yet</div>
         )}
       </div>
     </div>

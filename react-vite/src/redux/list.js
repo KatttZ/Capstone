@@ -4,6 +4,7 @@ const ADD_BOARD_LIST = "list/addBoardList";
 const GET_LIST = "list/getList";
 const UPDATE_LIST = "list/updateList";
 const DELETE_LIST = "list/deleteList";
+const REORDER_LISTS = "list/reorderLists";
 
 // Action creators
 
@@ -44,6 +45,14 @@ const deleteList = (payload) => {
   return {
     type: DELETE_LIST,
     payload,
+  };
+};
+
+// action for reordering lists
+export const reorderLists = (reorderedLists) => {
+  return {
+    type: REORDER_LISTS,
+    payload: reorderedLists,
   };
 };
 
@@ -127,6 +136,32 @@ export const thunkDeleteList = (listId) => async (dispatch) => {
   }
 };
 
+export const thunkReorderLists = (boardId, reorderedLists) => async (dispatch) => {
+  try {
+    // Make an API call to update the order in the backend
+    const res = await fetch(`/api/boards/${boardId}/lists/reorder`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ reorderedLists }),
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      // Dispatch the action to update the state
+      dispatch(reorderLists(data.lists));
+      return data;
+    } else {
+      const errors = await res.json();
+      return errors;
+    }
+  } catch (err) {
+    console.error("Error reordering lists:", err);
+    return { errors: "An error occurred while reordering lists." };
+  }
+};
+
+
+
 // Reducer
 const initialState = {
   allLists: [],
@@ -158,6 +193,12 @@ const listReducer = (state = initialState, action) => {
       return {
         ...state,
         allLists: state.allLists.filter((list) => list.id !== action.payload),
+      };
+    
+    case REORDER_LISTS:
+      return {
+        ...state,
+        allLists: action.payload,
       };
 
     default:

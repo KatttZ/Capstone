@@ -1,6 +1,6 @@
 from flask import Blueprint,request
 from flask_login import login_required, current_user
-from app.models import db, Card, Comment
+from app.models import db, Card, Comment,List
 from datetime import datetime
 
 
@@ -93,7 +93,55 @@ def delete_card(card_id):
     return {'message': 'Card deleted'}  
 
 
+@card_routes.route('/<int:card_id>/move', methods=['PUT'])
+@login_required
+def move_card(card_id):
+    """
+    Move a card to a different list and adjust positions
+    """
+    card = Card.query.get(card_id)
+    if not card:
+        return {'errors': 'Card not found'}, 404
+    
+    # Ensure user is authorized
+    if card.list.board.user_id != current_user.id:
+        return {'errors': 'Unauthorized'}, 401
 
+    data = request.get_json()
+    dest_list_id = data.get('destListId')
+    dest_index = data.get('destIndex', 1)
+
+    # Get destination list
+    dest_list = List.query.get(dest_list_id)
+    if not dest_list:
+        return {'errors': 'Destination list not found'}, 404
+
+    # Remove card from source list
+    source_list_id = card.list_id
+
+    # Shift cards in source list
+    Card.query.filter(
+        Card.list_id == source_list_id, 
+        Card.position > card.position
+    ).update({Card.position: Card.position - 1}, synchronize_session='fetch')
+
+    # Shift cards in destination list
+    Card.query.filter(
+        Card.list_id == dest_list_id, 
+        Card.position >= dest_index
+    ).update({Card.position: Card.position + 1}, synchronize_session='fetch')
+
+    # Move the card
+    card.list_id = dest_list_id
+    card.position = dest_index
+
+    db.session.commit()
+
+    return {
+        'card': card.to_dict(),
+        'source_list_id': source_list_id,
+        'dest_list_id': dest_list_id
+    }
 
 
 #================================Comment related routes==============================

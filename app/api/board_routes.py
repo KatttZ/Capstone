@@ -144,3 +144,33 @@ def create_list(board_id):
     db.session.add(new_list)
     db.session.commit()
     return new_list.to_dict()
+
+
+@board_routes.route('/<int:board_id>/lists/reorder', methods=['PUT'])
+@login_required
+def reorder_lists(board_id):
+    """
+    Reorder lists within a board
+    """
+    board = Board.query.get(board_id)
+    if not board:
+        return {'errors': 'Board not found'}, 404
+    if board.user_id != current_user.id:
+        return {'errors': 'Unauthorized'}, 401
+
+    data = request.get_json()
+    reordered_list_ids = data.get('reorderedLists')
+    if not reordered_list_ids:
+        return {'errors': 'No reordered list IDs provided'}, 400
+
+    # Update the position of each list
+    for position, list_id in enumerate(reordered_list_ids, start=1):
+        list_obj = List.query.get(list_id)
+        if list_obj and list_obj.board_id == board_id:
+            list_obj.position = position
+
+    db.session.commit()
+
+    # Return the updated lists
+    lists = List.query.filter(List.board_id == board_id).order_by(List.position).all()
+    return {'lists': [list.to_dict() for list in lists]}

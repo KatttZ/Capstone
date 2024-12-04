@@ -1,3 +1,4 @@
+import { Droppable, Draggable } from "../../../node_modules/@hello-pangea/dnd";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import OpenModalButton from "../OpenModalButton";
@@ -59,25 +60,23 @@ export default function ListDetails({ list, boardId }) {
 
   const handleCardSubmit = (e) => {
     e.preventDefault();
-    
+
     const trimmedTitle = newCardTitle.trim();
     if (!trimmedTitle) {
       setErrors({ card: "Card title cannot be empty." });
       return;
     }
-    
+
     if (trimmedTitle.length > 25) {
       setErrors({ card: "Card title should be 25 characters or less." });
       return;
     }
-    
+
     dispatch(thunkAddListCard(list.id, trimmedTitle));
     setNewCardTitle("");
-    setErrors(""); 
+    setErrors("");
     setIsAddingCard(false);
   };
-  
-
 
   return (
     <div className="list">
@@ -115,44 +114,74 @@ export default function ListDetails({ list, boardId }) {
         </div>
       </div>
       {/* Cards Section */}
-      <div className="cards-container">
-        {cards &&
-          cards.map((card) => (
-            <CardDetails key={card.id} card={card} listId={list.id} />
-          ))}
 
-        {/* Add Card Button */}
-        {isAddingCard ? (
-          <div className="add-card-form">
-            <textarea
-              className="card-input"
-              value={newCardTitle}
-              onChange={(e) => setNewCardTitle(e.target.value)}
-              placeholder="Enter a title for this card..."
-              autoFocus
-            />
-            {errors?.card && <p className="error-text">{errors.card}</p>}
-            <div className="add-card-controls">
-              <button onClick={handleCardSubmit} className="add-card-submit">
-                Add card
-              </button>
-              <button
-                onClick={() => {setIsAddingCard(false); setErrors(""); setNewCardTitle("");}}
-                className="add-card-cancel"
+      <Droppable droppableId={list.id.toString()} type="CARD">
+        {(provided) => (
+          <div
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+            className="cards-container"
+          >
+            {cards.map((card, index) => (
+              <Draggable
+                key={card.id}
+                draggableId={card.id.toString()}
+                index={index}
               >
-                ✕
-              </button>
+                {(provided) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                  >
+                    <CardDetails card={card} listId={list.id} />
+                  </div>
+                )}
+              </Draggable>
+            ))}
+            {provided.placeholder}
+            <div className="add-card-section">
+              {isAddingCard ? (
+                <div className="add-card-form">
+                  <textarea
+                    value={newCardTitle}
+                    onChange={(e) => setNewCardTitle(e.target.value)}
+                    placeholder="Enter a title for this card..."
+                    className="card-input"
+                    autoFocus
+                  />
+                  {errors?.card && <p className="error-text">{errors.card}</p>}
+                  <div className="add-card-controls">
+                    <button
+                      onClick={handleCardSubmit}
+                      className="add-card-submit"
+                    >
+                      Add card
+                    </button>
+                    <button
+                      onClick={() => {
+                        setIsAddingCard(false);
+                        setErrors("");
+                        setNewCardTitle("");
+                      }}
+                      className="add-card-cancel"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <button
+                  className="add-card-button"
+                  onClick={() => setIsAddingCard(true)}
+                >
+                  + Add a card
+                </button>
+              )}
             </div>
           </div>
-        ) : (
-          <button
-            className="add-card-button"
-            onClick={() => setIsAddingCard(true)}
-          >
-            + Add a card
-          </button>
         )}
-      </div>
+      </Droppable>
     </div>
   );
 }

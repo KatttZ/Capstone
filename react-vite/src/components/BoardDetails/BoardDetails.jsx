@@ -1,7 +1,9 @@
+import { DragDropContext} from "../../../node_modules/@hello-pangea/dnd";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { thunkGetAllBoards, thunkUpdateBoard } from "../../redux/board";
-import { thunkGetBoardLists } from "../../redux/list";
+import { thunkGetBoardLists} from "../../redux/list";
+import { thunkMoveCard } from "../../redux/card";
 import OpenModalButton from "../OpenModalButton";
 import CreateItemModal from "../CreateItemModal";
 import ListDetails from "../ListDetails";
@@ -12,6 +14,7 @@ export default function BoardDetails({ boardId }) {
   const [isLoading, setIsLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [title, setTitle] = useState("");
+
 
   const board = useSelector((state) =>
     state.board.allBoards.find((board) => board.id === boardId)
@@ -24,12 +27,14 @@ export default function BoardDetails({ boardId }) {
     const fetchBoardData = async () => {
       setIsLoading(true);
       await dispatch(thunkGetAllBoards()),
-        await dispatch(thunkGetBoardLists(boardId)),
-        setIsLoading(false);
+      await dispatch(thunkGetBoardLists(boardId)),
+      setIsLoading(false);
     };
 
     fetchBoardData();
   }, [dispatch, boardId]);
+
+
 
   const handleTitleClick = () => {
     setIsEditing(true);
@@ -52,6 +57,30 @@ export default function BoardDetails({ boardId }) {
     }
   };
 
+
+  const handleDragEnd = async (result) => {
+    const { destination, source, type, draggableId } = result;
+    
+    if (!destination) return;
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) return;
+  
+    // Handle card movement
+    if (type === "CARD") {
+      try {
+        await dispatch(thunkMoveCard(
+          parseInt(draggableId),
+          parseInt(destination.droppableId),
+          destination.index
+        ));
+      } catch (error) {
+        console.error("Failed to move card:", error);
+      }
+    }
+  };
+  
   if (isLoading) return <div className="board-details">Loading...</div>;
 
   if (!board) {
@@ -83,21 +112,28 @@ export default function BoardDetails({ boardId }) {
         )}
       </div>
 
-      {/* Lists Section */}
+    {/* Lists Section */}
+    <DragDropContext onDragEnd={handleDragEnd}>
       <div className="lists-container">
-        {lists &&
-          lists.map((list) => (
-            <ListDetails key={list.id} list={list} boardId={board.id} />
-          ))}
+        {lists.map((list) => (
+          <ListDetails
+            key={list.id}
+            list={list}
+            boardId={board.id}
+          />
+        ))}
 
         {/* Add New List Section */}
         <div className="add-list-container">
           <OpenModalButton
-            modalComponent={<CreateItemModal type="list" boardId={board.id} />}
+            modalComponent={
+              <CreateItemModal type="list" boardId={board.id} />
+            }
             buttonText="+ Add New List"
           />
         </div>
       </div>
+    </DragDropContext>
     </div>
   );
 }

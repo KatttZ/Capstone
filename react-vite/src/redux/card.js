@@ -4,6 +4,7 @@ const ADD_LIST_CARD = "card/addListCard";
 const GET_CARD = "card/getCard";
 const UPDATE_CARD = "card/updateCard";
 const DELETE_CARD = "card/deleteCard";
+const MOVE_CARD = "card/moveCard";
 
 // Action Creators
 const getListCards = (payload) => {
@@ -38,6 +39,13 @@ const deleteCard = (payload) => {
   return {
     type: DELETE_CARD,
     payload,
+  };
+};
+
+const moveCard = (cardId, sourceListId, destListId, destIndex) => {
+  return {
+    type: MOVE_CARD,
+    payload: { cardId, sourceListId, destListId, destIndex },
   };
 };
 
@@ -126,11 +134,16 @@ export const thunkDeleteCard = (cardId) => async (dispatch) => {
   }
 };
 
-
 export const thunkMoveCard =
-  (cardId, destListId, destIndex) => async (dispatch) => {
-    try {
+  (cardId, destListId, destIndex) => async (dispatch, getState) => {
+    const currentState = getState();
+    const card = currentState.card.allCards.find((c) => c.id === cardId);
+    const sourceListId = card.list_id;
 
+    // Optimistic update
+    dispatch(moveCard(cardId, sourceListId, destListId, destIndex));
+
+    try {
       const res = await fetch(`/api/cards/${cardId}/move`, {
         method: "PUT",
         headers: {
@@ -143,23 +156,16 @@ export const thunkMoveCard =
       });
 
       if (!res.ok) {
-        const errorText = await res.text();
-        console.error("Move Card Error Response:", errorText);
-        throw new Error(errorText);
+        throw new Error(await res.text());
       }
 
       const data = await res.json();
-      console.log("Move Card Response:", data);
-
-      // Refresh both source and destination lists
-      await dispatch(thunkGetListCards(data.source_list_id));
-      if (data.source_list_id !== destListId) {
-        await dispatch(thunkGetListCards(destListId));
-      }
-
       return data;
     } catch (error) {
-      console.error("Error moving card:", error);
+      dispatch(thunkGetListCards(sourceListId));
+      if (sourceListId !== destListId) {
+        dispatch(thunkGetListCards(destListId));
+      }
       throw error;
     }
   };
@@ -203,6 +209,35 @@ const cardReducer = (state = initialState, action) => {
         ...state,
         allCards: state.allCards.filter((card) => card.id !== action.payload),
       };
+    case MOVE_CARD: {
+      const { cardId, destListId, destIndex } = action.payload;
+
+      // Get all cards excluding the moved one
+      const cardToMove = state.allCards.find((card) => card.id === cardId);
+      const otherCards = state.allCards.filter((card) => card.id !== cardId);
+
+      // Get destination list cards
+      const destListCards = otherCards.filter(
+        (card) => card.list_id === destListId
+      );
+
+      // Insert card at new position
+      destListCards.splice(destIndex, 0, {
+        ...cardToMove,
+        list_id: destListId,
+      });
+
+      // Combine cards from all lists
+      const newCards = [
+        ...otherCards.filter((card) => card.list_id !== destListId),
+        ...destListCards,
+      ];
+
+      return {
+        ...state,
+        allCards: newCards,
+      };
+    }
     default:
       return state;
   }

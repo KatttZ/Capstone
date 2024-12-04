@@ -79,10 +79,8 @@ export default function BoardDetails({ boardId }) {
         console.error("Failed to move card:", error);
       }
     }
-
   };
   
-
   if (isLoading) return <div className="board-details">Loading...</div>;
 
   if (!board) {

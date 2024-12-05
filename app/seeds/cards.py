@@ -10,8 +10,10 @@ def seed_cards():
     card5 = Card(title='Create Components', description='Create the components for the project', list_id=2, position=2)
     card6 = Card(title='Create Redux Store', description='Create the redux store for the project', list_id=2, position=3)
     card7 = Card(title='Create Styling', description='Create the styling for the project', list_id=3, position=1)
+    card8 = Card(title='Revise Resume', description='Revise resume for job applications', list_id=9, position=1)
+    card9 = Card(title='Health Insurance', description='Sign up for health insurance', list_id=9, position=2)
 
-    db.session.add_all([card1, card2, card3, card4, card5, card6, card7])
+    db.session.add_all([card1, card2, card3, card4, card5, card6, card7, card8, card9])
     db.session.commit()
 
 

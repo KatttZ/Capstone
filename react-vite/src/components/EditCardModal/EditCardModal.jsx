@@ -7,11 +7,11 @@ import ConfirmDeletionModal from "../ConfirmDeletionModal";
 import { RiBankCardLine } from "react-icons/ri";
 import { ImParagraphCenter } from "react-icons/im";
 import { MdOutlineInsertComment } from "react-icons/md";
-import { AiOutlineCalendar } from 'react-icons/ai';
+import { AiOutlineCalendar } from "react-icons/ai";
 import "./EditCardModal.css";
 
 const formatDateForInput = (date) => {
-  if (!date) return '';
+  if (!date) return "";
   return new Date(date).toISOString().slice(0, 16);
 };
 
@@ -19,24 +19,19 @@ export default function EditCardModal({ card }) {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
   const [content, setContent] = useState("");
+  const [title, setTitle] = useState(card?.title || "");
+  const [dueDate, setDueDate] = useState(card?.due_date || "");
   const [description, setDescription] = useState("");
+  const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [isEditingDescription, setIsEditingDescription] = useState(false);
-  const cardComments = useSelector((state) => state.comment[card.id]);
-  
-  const [dueDate, setDueDate] = useState(card?.due_date || '');
-  const handleDueDateSave = async (e) => {
-    const newDate = e.target.value;
-    setDueDate(newDate);
-    await dispatch(
-      thunkUpdateCard({
-        ...card,
-        due_date: newDate
-      })
-    );
-  };
+  const cardComments = useSelector((state) => state.comment[card.id]?.slice().sort((a, b) => a.id - b.id));
+
+
 
   useEffect(() => {
+    setTitle(card?.title || "");
     setDescription(card?.description || "");
+    setDueDate(card?.due_date || "");
   }, [card]);
 
   useEffect(() => {
@@ -68,24 +63,62 @@ export default function EditCardModal({ card }) {
     setIsEditingDescription(false);
   };
 
+  const handleTitleSave = async () => {
+    if (title.trim().length >= 25 || title.trim().length === 0) {
+      alert("Title must be between 1 and 25 characters");
+      return;
+    }
+    if (title.trim() !== card.title) {
+      await dispatch(
+        thunkUpdateCard({
+          ...card,
+          title: title.trim(),
+        })
+      );
+    }
+    setIsEditingTitle(false);
+  };
+  const handleDueDateSave = async (e) => {
+    const newDate = e.target.value;
+    setDueDate(newDate);
+    await dispatch(
+      thunkUpdateCard({
+        ...card,
+        due_date: newDate,
+      })
+    );
+  };
+
   if (!card) return <div>Card data is unavailable</div>;
 
   return (
     <div className="edit-card-container">
       <h3>
-        <RiBankCardLine /> {card.title}
+        <RiBankCardLine />
+        {isEditingTitle ? (
+          <div className="edit-title-container">
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              onBlur={handleTitleSave}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleTitleSave();
+                if (e.key === "Escape") {
+                  setTitle(card.title);
+                  setIsEditingTitle(false);
+                }
+              }}
+              className="card-title-input"
+              autoFocus
+            />
+          </div>
+        ) : (
+          <span onClick={() => setIsEditingTitle(true)} className="card-title">
+            {card.title}
+          </span>
+        )}
       </h3>
-
-      <div className="card-due-date">
-        <p>
-          <AiOutlineCalendar /> Due Date:
-        </p>
-        <input 
-          type="datetime-local"
-          value={formatDateForInput(dueDate)}
-          onChange={handleDueDateSave}
-        />
-      </div>
 
       <div className="card-description">
         <p>
@@ -129,6 +162,18 @@ export default function EditCardModal({ card }) {
           </div>
         )}
       </div>
+
+      <div className="card-due-date">
+        <p>
+          <AiOutlineCalendar /> Due Date:
+        </p>
+        <input
+          type="datetime-local"
+          value={formatDateForInput(dueDate)}
+          onChange={handleDueDateSave}
+        />
+      </div>
+
       <div>
         <p>
           <MdOutlineInsertComment /> Comments:

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import OpenModalButton from "../OpenModalButton";
 import ConfirmDeletionModal from "../ConfirmDeletionModal";
 import CardDetails from "../CardDetails";
-import { thunkGetBoardLists, thunkUpdateList } from "../../redux/list";
+import { thunkUpdateList } from "../../redux/list";
 import { thunkGetListCards, thunkAddListCard } from "../../redux/card";
 import "./ListDetails.css";
 
@@ -54,10 +54,6 @@ export default function ListDetails({ list, boardId }) {
     }
   };
 
-  const handleListDelete = async () => {
-    await dispatch(thunkGetBoardLists(boardId));
-  };
-
   const handleCardSubmit = (e) => {
     e.preventDefault();
 
@@ -105,7 +101,6 @@ export default function ListDetails({ list, boardId }) {
               <ConfirmDeletionModal
                 itemId={list.id}
                 itemType="list"
-                onDeleteSuccess={handleListDelete}
                 boardId={boardId}
               />
             }

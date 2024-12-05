@@ -6,7 +6,7 @@ import { thunkDeleteCard } from "../../redux/card";
 import { thunkDeleteComment } from "../../redux/comment";
 import "./ConfirmDeletionModal.css";
 
-function ConfirmDeletionModal({ itemId, itemType, onDeleteSuccess }) {
+function ConfirmDeletionModal({ itemId, itemType }) {
   const dispatch = useDispatch();
   const { closeModal } = useModal();
 
@@ -16,9 +16,6 @@ function ConfirmDeletionModal({ itemId, itemType, onDeleteSuccess }) {
     }
     if (itemType === 'list') {
       await dispatch(thunkDeleteList(itemId));
-      if (onDeleteSuccess) {
-        await onDeleteSuccess();
-      }
     } 
     if (itemType === 'card') {
       await dispatch(thunkDeleteCard(itemId));

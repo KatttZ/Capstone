@@ -20,22 +20,13 @@ export default function EditCardModal({ card }) {
   const [isLoading, setIsLoading] = useState(true);
   const [content, setContent] = useState("");
   const [title, setTitle] = useState(card?.title || "");
+  const [dueDate, setDueDate] = useState(card?.due_date || "");
   const [description, setDescription] = useState("");
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [isEditingDescription, setIsEditingDescription] = useState(false);
-  const cardComments = useSelector((state) => state.comment[card.id]);
+  const cardComments = useSelector((state) => state.comment[card.id]?.slice().sort((a, b) => a.id - b.id));
 
-  const [dueDate, setDueDate] = useState(card?.due_date || "");
-  const handleDueDateSave = async (e) => {
-    const newDate = e.target.value;
-    setDueDate(newDate);
-    await dispatch(
-      thunkUpdateCard({
-        ...card,
-        due_date: newDate,
-      })
-    );
-  };
+
 
   useEffect(() => {
     setTitle(card?.title || "");
@@ -82,6 +73,16 @@ export default function EditCardModal({ card }) {
       );
     }
     setIsEditingTitle(false);
+  };
+  const handleDueDateSave = async (e) => {
+    const newDate = e.target.value;
+    setDueDate(newDate);
+    await dispatch(
+      thunkUpdateCard({
+        ...card,
+        due_date: newDate,
+      })
+    );
   };
 
   if (!card) return <div>Card data is unavailable</div>;

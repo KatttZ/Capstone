@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { thunkGetAllBoards } from "../../redux/board";
 import OpenModalButton from "../OpenModalButton";
 import ConfirmDeletionModal from "../ConfirmDeletionModal";
-import { FaArrowLeft,FaArrowRight } from "react-icons/fa";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import "./Sidebar.css";
 
 export default function Sidebar({ onBoardsClick, onBoardSelect }) {
@@ -31,9 +31,7 @@ export default function Sidebar({ onBoardsClick, onBoardSelect }) {
   return (
     <div className={`sidebar ${isCollapsed ? "collapsed" : ""}`}>
       <div className="sidebar-header">
-        <h2>
-          {user.username}&apos;s Workspace
-        </h2>
+        <h2>{user.username}&apos;s Workspace</h2>
         <div className="collapse-icon" onClick={handleCollapse}>
           {isCollapsed ? <FaArrowRight /> : <FaArrowLeft />}
         </div>
@@ -54,7 +52,10 @@ export default function Sidebar({ onBoardsClick, onBoardSelect }) {
                   <div className="board-actions">
                     <OpenModalButton
                       modalComponent={
-                        <ConfirmDeletionModal itemId={board.id} itemType="board" />
+                        <ConfirmDeletionModal
+                          itemId={board.id}
+                          itemType="board"
+                        />
                       }
                       buttonText="Delete"
                     />

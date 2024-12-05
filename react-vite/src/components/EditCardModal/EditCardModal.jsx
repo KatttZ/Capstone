@@ -7,7 +7,13 @@ import ConfirmDeletionModal from "../ConfirmDeletionModal";
 import { RiBankCardLine } from "react-icons/ri";
 import { ImParagraphCenter } from "react-icons/im";
 import { MdOutlineInsertComment } from "react-icons/md";
+import { AiOutlineCalendar } from 'react-icons/ai';
 import "./EditCardModal.css";
+
+const formatDateForInput = (date) => {
+  if (!date) return '';
+  return new Date(date).toISOString().slice(0, 16);
+};
 
 export default function EditCardModal({ card }) {
   const dispatch = useDispatch();
@@ -15,8 +21,19 @@ export default function EditCardModal({ card }) {
   const [content, setContent] = useState("");
   const [description, setDescription] = useState("");
   const [isEditingDescription, setIsEditingDescription] = useState(false);
-
   const cardComments = useSelector((state) => state.comment[card.id]);
+  
+  const [dueDate, setDueDate] = useState(card?.due_date || '');
+  const handleDueDateSave = async (e) => {
+    const newDate = e.target.value;
+    setDueDate(newDate);
+    await dispatch(
+      thunkUpdateCard({
+        ...card,
+        due_date: newDate
+      })
+    );
+  };
 
   useEffect(() => {
     setDescription(card?.description || "");
@@ -58,6 +75,17 @@ export default function EditCardModal({ card }) {
       <h3>
         <RiBankCardLine /> {card.title}
       </h3>
+
+      <div className="card-due-date">
+        <p>
+          <AiOutlineCalendar /> Due Date:
+        </p>
+        <input 
+          type="datetime-local"
+          value={formatDateForInput(dueDate)}
+          onChange={handleDueDateSave}
+        />
+      </div>
 
       <div className="card-description">
         <p>

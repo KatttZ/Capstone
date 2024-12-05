@@ -13,6 +13,7 @@ class Card(db.Model):
     description = db.Column(db.Text, nullable=True)
     list_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('lists.id')), nullable=False)
     position = db.Column(db.Integer, nullable=False)
+    due_date = db.Column(db.DateTime, nullable=True)
 
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
@@ -29,6 +30,7 @@ class Card(db.Model):
             'description': self.description,
             'list_id': self.list_id,
             'position': self.position,
+            "due_date": self.due_date,
             'created_at': self.created_at,
             'updated_at': self.updated_at,
         }

@@ -26,6 +26,10 @@ export default function Sidebar({ onBoardsClick, onBoardSelect }) {
     onBoardsClick();
   };
 
+  const handleMembersClick = () => {
+    window.alert("Feature Coming Soon!");
+  }
+
   const handleCollapse = () => {
     setIsCollapsed(!isCollapsed);
   };
@@ -40,11 +44,14 @@ export default function Sidebar({ onBoardsClick, onBoardSelect }) {
       </div>
       {!isCollapsed && (
         <>
-          <h2 className="all-boards" onClick={handleBoardsClick}>
-            Home
-          </h2>
+          <h3 className="all-boards" onClick={handleBoardsClick}>
+            Boards
+          </h3>
+          <h3 className="members" onClick={handleMembersClick}>
+            Members
+          </h3>
           <div className="my-boards">
-          <h2>My Boards</h2> 
+          <h2>Your Boards</h2> 
           <OpenModalButton
           modalComponent={<CreateItemModal type="board"/>}
           buttonText={<FaPlus />}
@@ -54,11 +61,11 @@ export default function Sidebar({ onBoardsClick, onBoardSelect }) {
           <ul>
             {boards.length > 0 ? (
               boards.map((board) => (
-                <li key={board.id} className="sidebar-board">
-                  <span onClick={() => handleBoardSelect(board.id)}>
+                <li key={board.id} className="sidebar-board" onClick={() => handleBoardSelect(board.id)}>
+                  <span >
                     {board.title}
                   </span>
-                  <div className="board-actions">
+                  <div className="board-actions" onClick={(e) => e.stopPropagation()} >
                     <OpenModalButton
                       modalComponent={
                         <ConfirmDeletionModal

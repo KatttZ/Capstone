@@ -1,5 +1,6 @@
 .board-details {
   flex: 1;
+  min-width: 0; 
 }
 
 .board-header {
@@ -26,7 +27,6 @@
 .lists-container {
   display: flex;
   gap: 20px;
-  overflow-x: auto;
   padding: 10px;
   align-items: flex-start; 
 }

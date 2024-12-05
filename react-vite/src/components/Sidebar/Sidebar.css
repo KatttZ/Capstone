@@ -12,14 +12,19 @@
 }
 
 .all-boards {
-  text-align: center;
-  padding: 5px 0;
+  padding: 5px;
   background-color: hsla(330, 72%, 57%, 0.9);
   cursor: pointer;
 }
 
 .all-boards:hover {
   background-color: hsla(330, 72%, 57%, 1);
+}
+
+.members {
+  padding: 5px;
+  background-color: hsla(206, 80%, 55%, 0.9);
+  cursor: pointer;
 }
 
 .my-boards {

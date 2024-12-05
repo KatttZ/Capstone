@@ -12,8 +12,35 @@
 }
 
 .all-boards {
+  padding: 5px;
   background-color: hsla(330, 72%, 57%, 0.9);
   cursor: pointer;
+}
+
+.all-boards:hover {
+  background-color: hsla(330, 72%, 57%, 1);
+}
+
+.members {
+  padding: 5px;
+  background-color: hsla(206, 80%, 55%, 0.9);
+  cursor: pointer;
+}
+
+.my-boards {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.my-boards button {
+  background: none;
+  border: none;
+}
+
+.my-boards button:hover {
+  background-color: lightgrey;
+  border-radius: 3px;
 }
 
 .sidebar ul {
@@ -70,12 +97,18 @@
 .sidebar-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: baseline;
   border-bottom: 1px solid #ccc;
 }
 
 .collapse-icon {
   cursor: pointer;
+}
+
+.collapse-icon:hover {
+  padding: 3px;
+  background-color: lightgrey;
+  border-radius: 3px;
 }
 
 .sidebar.collapsed .sidebar-workspace,

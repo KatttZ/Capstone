@@ -5,9 +5,16 @@
   padding: 30px;
   width: 500px;
 }
-
+.edit-card-container h3 {
+  display: flex;
+  align-items: center;
+  gap:5px;
+}
 .edit-card-container p {
   font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap:5px;
 }
 
 .card-description {

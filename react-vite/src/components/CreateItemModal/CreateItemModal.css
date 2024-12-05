@@ -1,29 +1,40 @@
 .create-item-modal {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    padding: 30px;
-    border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 30px;
+  border-radius: 5px;
 }
 
-
 .create-item-modal form {
-    display: flex;
-    flex-direction: column;
-    gap:10px;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 
 .create-item-modal form input {
-    margin-left: 10px;
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+  margin-left: 10px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
+.create-item-modal button {
+  background-color: #0079bf;
+  color: white;
+  border: none;
+  padding: 5px 16px;
+  border-radius: 3px;
+  transition: background-color 0.3s ease;
+}
+
+.create-item-modal button:hover {
+  background-color: #005a94;
+}
 .error-text {
-    color: red;
-    font-size: 14px;
+  color: red;
+  font-size: 14px;
 }

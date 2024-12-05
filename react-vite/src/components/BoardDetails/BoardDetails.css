@@ -43,6 +43,9 @@
   border-radius: 5px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
+.add-list-container button:hover {
+  background-color: #110e0e3d;
+}
 
 @media screen and (max-width: 768px) {
   .lists-container {

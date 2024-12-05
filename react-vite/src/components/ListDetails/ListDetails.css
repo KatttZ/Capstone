@@ -35,10 +35,40 @@
   margin: 8px 0;
 }
 
+.add-card-controls {
+  display: flex;
+  gap: 10px;
+}
+
+.description-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.add-card-submit {
+  background-color: #0079bf;
+  color: white;
+  border: none;
+  padding: 8px;
+  border-radius: 3px;
+}
+.add-card-submit:hover {
+  background-color: #005a94;
+}
+.add-card-cancel {
+  background-color: transparent;
+  border: none;
+}
+
 .add-card-button {
   background: #110e0e3d;
   border: none;
   border-radius: 3px;
   color: white;
   padding: 8px;
+}
+
+.add-card-button:hover {
+  background: #696868;
+  transition: all 0.3s ease;
 }

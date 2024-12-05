@@ -47,3 +47,7 @@
   border-radius: 5px;
   padding: 10px;
 }
+
+.add-board-container button:hover {
+  background-color: #110e0e3d;
+}

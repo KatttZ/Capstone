@@ -12,8 +12,14 @@
 }
 
 .all-boards {
+  text-align: center;
+  padding: 5px 0;
   background-color: hsla(330, 72%, 57%, 0.9);
   cursor: pointer;
+}
+
+.all-boards:hover {
+  background-color: hsla(330, 72%, 57%, 1);
 }
 
 .sidebar ul {

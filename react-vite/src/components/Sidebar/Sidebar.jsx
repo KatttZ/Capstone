@@ -41,7 +41,7 @@ export default function Sidebar({ onBoardsClick, onBoardSelect }) {
       {!isCollapsed && (
         <>
           <h2 className="all-boards" onClick={handleBoardsClick}>
-            Boards
+            Home
           </h2>
           <h2>My Boards</h2>
           <ul>

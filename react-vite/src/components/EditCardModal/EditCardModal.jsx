@@ -64,6 +64,10 @@ export default function EditCardModal({ card }) {
   };
 
   const handleTitleSave = async () => {
+    if (title.trim().length >= 25 || title.trim().length === 0) {
+      alert("Title must be between 1 and 25 characters");
+      return;
+    }
     if (title.trim() !== card.title) {
       await dispatch(
         thunkUpdateCard({

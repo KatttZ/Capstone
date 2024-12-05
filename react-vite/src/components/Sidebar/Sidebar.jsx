@@ -2,8 +2,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { thunkGetAllBoards } from "../../redux/board";
 import OpenModalButton from "../OpenModalButton";
+import CreateItemModal from "../CreateItemModal";
 import ConfirmDeletionModal from "../ConfirmDeletionModal";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa6";
 import "./Sidebar.css";
 
 export default function Sidebar({ onBoardsClick, onBoardSelect }) {
@@ -41,7 +43,14 @@ export default function Sidebar({ onBoardsClick, onBoardSelect }) {
           <h2 className="all-boards" onClick={handleBoardsClick}>
             Home
           </h2>
-          <h2>My Boards</h2>
+          <div className="my-boards">
+          <h2>My Boards</h2> 
+          <OpenModalButton
+          modalComponent={<CreateItemModal type="board"/>}
+          buttonText={<FaPlus />}
+          />
+          </div>
+     
           <ul>
             {boards.length > 0 ? (
               boards.map((board) => (

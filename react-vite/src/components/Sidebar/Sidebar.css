@@ -22,6 +22,22 @@
   background-color: hsla(330, 72%, 57%, 1);
 }
 
+.my-boards {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.my-boards button {
+  background: none;
+  border: none;
+}
+
+.my-boards button:hover {
+  background-color: lightgrey;
+  border-radius: 3px;
+}
+
 .sidebar ul {
   list-style: none;
   padding: 0;
@@ -76,12 +92,18 @@
 .sidebar-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: baseline;
   border-bottom: 1px solid #ccc;
 }
 
 .collapse-icon {
   cursor: pointer;
+}
+
+.collapse-icon:hover {
+  padding: 3px;
+  background-color: lightgrey;
+  border-radius: 3px;
 }
 
 .sidebar.collapsed .sidebar-workspace,

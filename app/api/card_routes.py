@@ -39,6 +39,12 @@ def update_card(card_id):
     # Update basic attributes
     card.title = data['title']
     card.description = data.get('description', '')
+
+    if 'due_date' in data:
+        try:
+            card.due_date = datetime.fromisoformat(data['due_date'].replace('Z', '+00:00')) if data['due_date'] else None
+        except ValueError:
+            return {'errors': 'Invalid date format'}, 400
     
     new_position = data.get('position', card.position)
     new_list_id = data.get('list_id', card.list_id)

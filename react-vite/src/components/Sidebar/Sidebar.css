@@ -3,6 +3,7 @@
   background-color: #f4f5f7;
   padding: 20px;
   border-right: 1px solid #ccc;
+  transition: width 0.3s ease;
 }
 
 .sidebar h2 {
@@ -11,7 +12,7 @@
 }
 
 .all-boards {
-  background-color: hsla(331, 45%, 47%, 0.9);
+  background-color: hsla(330, 72%, 57%, 0.9);
   cursor: pointer;
 }
 
@@ -35,7 +36,6 @@
 .sidebar-board:hover {
   background-color: #e2e6ea;
 }
-
 
 .board-actions {
   visibility: hidden;
@@ -61,4 +61,30 @@
   padding: 12px;
   font-style: italic;
   color: #555;
+}
+
+.sidebar.collapsed {
+  width: 20px;
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+}
+
+.collapse-icon {
+  cursor: pointer;
+}
+
+.sidebar.collapsed .sidebar-workspace,
+.sidebar.collapsed .all-boards,
+.sidebar.collapsed h2,
+.sidebar.collapsed ul {
+  display: none;
+}
+
+.sidebar.collapsed .sidebar-header {
+  border: none;
 }

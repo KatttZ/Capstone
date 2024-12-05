@@ -4,7 +4,16 @@ import { thunkGetCardComments, thunkAddComment } from "../../redux/comment";
 import { thunkUpdateCard } from "../../redux/card";
 import OpenModalButton from "../OpenModalButton";
 import ConfirmDeletionModal from "../ConfirmDeletionModal";
+import { RiBankCardLine } from "react-icons/ri";
+import { ImParagraphCenter } from "react-icons/im";
+import { MdOutlineInsertComment } from "react-icons/md";
+import { AiOutlineCalendar } from 'react-icons/ai';
 import "./EditCardModal.css";
+
+const formatDateForInput = (date) => {
+  if (!date) return '';
+  return new Date(date).toISOString().slice(0, 16);
+};
 
 export default function EditCardModal({ card }) {
   const dispatch = useDispatch();
@@ -12,8 +21,19 @@ export default function EditCardModal({ card }) {
   const [content, setContent] = useState("");
   const [description, setDescription] = useState("");
   const [isEditingDescription, setIsEditingDescription] = useState(false);
-
   const cardComments = useSelector((state) => state.comment[card.id]);
+  
+  const [dueDate, setDueDate] = useState(card?.due_date || '');
+  const handleDueDateSave = async (e) => {
+    const newDate = e.target.value;
+    setDueDate(newDate);
+    await dispatch(
+      thunkUpdateCard({
+        ...card,
+        due_date: newDate
+      })
+    );
+  };
 
   useEffect(() => {
     setDescription(card?.description || "");
@@ -52,12 +72,27 @@ export default function EditCardModal({ card }) {
 
   return (
     <div className="edit-card-container">
-      <h3>{card.title}</h3>
-      
+      <h3>
+        <RiBankCardLine /> {card.title}
+      </h3>
+
+      <div className="card-due-date">
+        <p>
+          <AiOutlineCalendar /> Due Date:
+        </p>
+        <input 
+          type="datetime-local"
+          value={formatDateForInput(dueDate)}
+          onChange={handleDueDateSave}
+        />
+      </div>
+
       <div className="card-description">
-        <p>Description:</p>
+        <p>
+          <ImParagraphCenter /> Description:
+        </p>
         {isEditingDescription ? (
-          <div className="description-edit">
+          <div className>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -94,6 +129,11 @@ export default function EditCardModal({ card }) {
           </div>
         )}
       </div>
+      <div>
+        <p>
+          <MdOutlineInsertComment /> Comments:
+        </p>
+      </div>
 
       <form onSubmit={handleCommentSubmit} className="comment-form">
         <input
@@ -129,11 +169,11 @@ export default function EditCardModal({ card }) {
                   buttonText="–"
                 />
               </div>
-              <div className="comment-content">{comment?.content}</div>
+              <div>{comment?.content}</div>
             </div>
           ))
         ) : (
-          <div className="no-comments">No comments yet</div>
+          <div>No comments yet</div>
         )}
       </div>
     </div>

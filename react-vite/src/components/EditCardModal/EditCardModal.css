@@ -17,6 +17,22 @@
   gap:5px;
 }
 
+
+/* Card Title */
+
+.card-title {
+  padding: 5px 10px;
+}
+
+.card-title:hover{
+  background-color: #d1d2d571;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+
+/*  Card Description */
+
 .card-description {
   margin: 20px 0;
 }
@@ -59,6 +75,8 @@
   border: none;
 }
 
+
+/*  Comment Section */
 .comment-form {
   display: flex;
   gap: 10px;

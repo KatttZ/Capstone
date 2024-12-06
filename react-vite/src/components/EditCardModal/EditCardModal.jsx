@@ -97,7 +97,7 @@ export default function EditCardModal({ card }) {
       <h3>
         <RiBankCardLine />
         {isEditingTitle ? (
-          <div className="edit-title-container">
+          <div>
             <input
               type="text"
               value={title}
@@ -110,7 +110,6 @@ export default function EditCardModal({ card }) {
                   setIsEditingTitle(false);
                 }
               }}
-              className="card-title-input"
               autoFocus
             />
           </div>

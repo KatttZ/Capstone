@@ -8,13 +8,19 @@
   padding: 10px;
 }
 
-.board-header h2 {
-  cursor: pointer;
+.board-title{
+  width:fit-content;
   padding: 8px;
   border-radius: 3px;
   font-size: 24px;
   font-weight: bold;
   margin: 0;
+}
+
+.board-title:hover {
+  background-color: #d1d2d552;
+  cursor: pointer;
+  border-radius: 5px;
 }
 
 .board-title-input {

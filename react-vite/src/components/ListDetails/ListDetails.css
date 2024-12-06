@@ -24,10 +24,13 @@
 
 .list h3 {
   font-size: 15px;
+  padding: 5px;
 }
 
 .list h3:hover {
+  background-color: #d1d2d57c;
   cursor: pointer;
+  border-radius: 5px;
 }
 
 .cards-container {

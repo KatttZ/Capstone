@@ -32,7 +32,7 @@ export default function EditCardModal({ card }) {
     setTitle(card?.title || "");
     setDescription(card?.description || "");
     setDueDate(card?.due_date || "");
-  }, [card]);
+  }, [card.title, card.description, card.due_date]);
 
   useEffect(() => {
     const loadComments = async () => {
@@ -56,13 +56,13 @@ export default function EditCardModal({ card }) {
   const handleDescriptionSave = async () => {
     await dispatch(
       thunkUpdateCard({
-        ...card,
+        id: card.id,
         description: description,
       })
     );
     setIsEditingDescription(false);
   };
-
+  
   const handleTitleSave = async () => {
     if (title.trim().length >= 25 || title.trim().length === 0) {
       alert("Title must be between 1 and 25 characters");
@@ -71,19 +71,20 @@ export default function EditCardModal({ card }) {
     if (title.trim() !== card.title) {
       await dispatch(
         thunkUpdateCard({
-          ...card,
+          id: card.id,
           title: title.trim(),
         })
       );
     }
     setIsEditingTitle(false);
   };
+  
   const handleDueDateSave = async (e) => {
     const newDate = e.target.value;
     setDueDate(newDate);
     await dispatch(
       thunkUpdateCard({
-        ...card,
+        id: card.id,
         due_date: newDate,
       })
     );
@@ -115,7 +116,7 @@ export default function EditCardModal({ card }) {
           </div>
         ) : (
           <span onClick={() => setIsEditingTitle(true)} className="card-title">
-            {card.title}
+            {title}
           </span>
         )}
       </h3>

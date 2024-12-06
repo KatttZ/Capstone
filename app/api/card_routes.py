@@ -37,8 +37,11 @@ def update_card(card_id):
     data = request.get_json()
     
     # Update basic attributes
-    card.title = data['title']
-    card.description = data.get('description', '')
+    if 'title' in data:
+        card.title = data['title']
+    
+    if 'description' in data:
+        card.description = data['description']
 
     if 'due_date' in data:
         try:

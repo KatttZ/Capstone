@@ -1,4 +1,4 @@
-from flask import Blueprint,request
+from flask import Blueprint,request,jsonify
 from flask_login import login_required, current_user
 from app.models import db, Board, List
 
@@ -89,6 +89,20 @@ def delete_board(board_id):
     db.session.commit()
     return {'message': 'Board deleted'}
 
+@board_routes.route('/search', methods=['GET'])
+@login_required
+def search_boards():
+    """
+    Search for boards by title
+    """
+    query = request.args.get('query','')
+    if not query:
+        return jsonify([])
+    boards = Board.query.filter(Board.user_id == current_user.id, Board.title.ilike(f'%{query}%')).all()
+
+    if not boards:
+        return {'boards': [], 'message': 'No boards found'}
+    return {'boards': [board.to_dict() for board in boards]}
 
 
 #================================Lists related routes==============================

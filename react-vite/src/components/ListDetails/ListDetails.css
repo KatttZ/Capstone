@@ -22,9 +22,29 @@
   border-radius: 3px;
 }
 
-.list h3 {
+.list-header {
+  height: 50px; 
+  display: flex;
+  align-items: center;
+}
+
+.list-title, .list-title-input {
   font-size: 15px;
   padding: 5px;
+  width: 100%; 
+  box-sizing: border-box; 
+  margin: 0;
+}
+
+.list-title-input {
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  outline: none;
+}
+
+.list-title-input:focus {
+  border-color: #0079bf;
+  box-shadow: 0 0 2px #0079bf;
 }
 
 .list h3:hover {

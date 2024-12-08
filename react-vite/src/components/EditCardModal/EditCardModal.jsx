@@ -103,6 +103,7 @@ export default function EditCardModal({ card }) {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               onBlur={handleTitleSave}
+              className="card-title-input"
               onKeyDown={(e) => {
                 if (e.key === "Enter") handleTitleSave();
                 if (e.key === "Escape") {

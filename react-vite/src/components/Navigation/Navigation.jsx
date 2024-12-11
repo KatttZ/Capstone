@@ -10,6 +10,7 @@ function Navigation() {
         <li className='logo-container'>
           <NavLink to="/">
             <img src='/logo.png' alt="Logo" className="logo" />
+            CardFlow
           </NavLink>
         </li>
 

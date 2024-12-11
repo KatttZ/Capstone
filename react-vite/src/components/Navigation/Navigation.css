@@ -40,11 +40,17 @@
 }
 
 .logo {
-  height: 50px;
-  width: 50px;
+  height: 40px;
+  width: 40px;
   object-fit: contain;
 }
 
+
+.logo-container a {
+  text-decoration: none;
+  color: black;
+  font-weight: bold;
+}
 
 /* ------------For Navigation Component------------ */
 

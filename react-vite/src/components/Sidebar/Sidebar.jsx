@@ -1,5 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { thunkGetAllBoards } from "../../redux/board";
 import OpenModalButton from "../OpenModalButton";
 import CreateItemModal from "../CreateItemModal";
@@ -10,6 +11,7 @@ import "./Sidebar.css";
 
 export default function Sidebar({ onBoardsClick, onBoardSelect }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const user = useSelector((state) => state.session.user);
   const boards = useSelector((state) => state.board.allBoards || []);
@@ -27,7 +29,7 @@ export default function Sidebar({ onBoardsClick, onBoardSelect }) {
   };
 
   const handleMembersClick = () => {
-    window.alert("Feature Coming Soon!");
+    navigate("/chat");
   }
 
   const handleCollapse = () => {
